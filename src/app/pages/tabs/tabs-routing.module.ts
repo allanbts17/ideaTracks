@@ -16,8 +16,8 @@ const routes: Routes = [
         loadChildren: () => import('../new-song/new-song.module').then( m => m.NewSongPageModule)
       },
       {
-        path: 'tab3',
-        loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
+        path: 'config',
+        loadChildren: () => import('../config/config.module').then( m => m.ConfigPageModule)
       },
       {
         path: '',

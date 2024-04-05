@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NewSongPageRoutingModule } from './new-song-routing.module';
+import { ConfigPageRoutingModule } from './config-routing.module';
 
-import { NewSongPage } from './new-song.page';
-import { ComponentsModule } from '../components/components.module';
+import { ConfigPage } from './config.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
@@ -15,8 +15,8 @@ import { ComponentsModule } from '../components/components.module';
     FormsModule,
     IonicModule,
     ComponentsModule,
-    NewSongPageRoutingModule
+    ConfigPageRoutingModule
   ],
-  declarations: [NewSongPage]
+  declarations: [ConfigPage]
 })
-export class NewSongPageModule {}
+export class ConfigPageModule {}

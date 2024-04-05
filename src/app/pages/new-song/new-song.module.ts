@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HomePageRoutingModule } from './home-routing.module';
+import { NewSongPageRoutingModule } from './new-song-routing.module';
 
-import { HomePage } from './home.page';
-import { ComponentsModule } from '../components/components.module';
+import { NewSongPage } from './new-song.page';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
@@ -15,8 +15,8 @@ import { ComponentsModule } from '../components/components.module';
     FormsModule,
     IonicModule,
     ComponentsModule,
-    HomePageRoutingModule
+    NewSongPageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [NewSongPage]
 })
-export class HomePageModule {}
+export class NewSongPageModule {}
