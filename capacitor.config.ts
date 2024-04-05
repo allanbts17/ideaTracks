@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ideaTracks',
+  appId: 'idea.tracks.composer',
+  appName: 'IdeaTracks',
   webDir: 'www',
   server: {
     androidScheme: 'https'
