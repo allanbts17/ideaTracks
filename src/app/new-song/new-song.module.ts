@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { NewSongPageRoutingModule } from './new-song-routing.module';
 
 import { NewSongPage } from './new-song.page';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     NewSongPageRoutingModule
   ],
   declarations: [NewSongPage]
