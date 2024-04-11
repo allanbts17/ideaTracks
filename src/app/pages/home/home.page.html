@@ -1,9 +1,23 @@
 <app-header title="Inicio"></app-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list lines="full">
+    <ion-item>
+      <ion-select aria-label="category" placeholder="Categoría" interface="popover" [(ngModel)]="selectedCategory">
+        @for(cat of common.categories; track $index){
+          <ion-select-option [value]="cat">{{cat}}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ion-list lines="full">
+    @for(song of getFilteredSongs(); track $index){
+      <ion-item button (click)="navigate(song)">
+        <ion-label>{{song.song}}</ion-label>
+      </ion-item>
+    }
+
+  </ion-list>
+  
 </ion-content>

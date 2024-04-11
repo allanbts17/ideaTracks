@@ -1,0 +1,43 @@
+
+<div class="omrs-input-group">
+  <label class="omrs-input-filled">
+    <input required class="custom" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)">
+    <span class="omrs-input-label">{{label}}</span>
+    @if(hintText){
+      <span class="omrs-input-helper">{{hintText}}</span>
+    }
+    @if(!(selectorList.length == 1 && selectorList[0] == '')){
+      <svg  id="{{trigger}}" xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-88 302a24 24 0 1124-24 24 24 0 01-24 24zm0-71a24 24 0 1124-24 24 24 0 01-24 24zm0-73a24 24 0 1124-24 24 24 0 01-24 24zm184 135H224a16 16 0 010-32h128a16 16 0 010 32zm0-71H224a16 16 0 010-32h128a16 16 0 010 32zm0-72H224a16 16 0 010-32h128a16 16 0 010 32z"/></svg>
+    }
+    
+  </label>
+</div>
+
+<ion-alert
+[trigger]="trigger"
+header="Selecciona la categoría"
+[buttons]="alertButtons"
+[inputs]="getSelectorMap()"
+></ion-alert>
+
+
+	
+
+
+
+<!-- <div class="omrs-input-group">
+  <label class="omrs-input-filled omrs-input-danger">
+    <input required>
+    <span class="omrs-input-label">Danger</span>
+    <span class="omrs-input-helper">Helper Text</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-6c.78 2.34 2.72 4 5 4s4.22-1.66 5-4H7z"/></svg>
+  </label>
+</div>
+<div class="omrs-input-group">
+  <label class="omrs-input-underlined">
+    <input required disabled>
+    <span class="omrs-input-label">Danger</span>
+    <span class="omrs-input-helper">Helper Text</span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-6c.78 2.34 2.72 4 5 4s4.22-1.66 5-4H7z"/></svg>
+  </label>
+</div> -->

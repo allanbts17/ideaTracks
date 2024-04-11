@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Common } from 'src/app/shared/classes/common';
+import { DEFAULT_FOLDER, FOLDERS_PATH, RECORDINGS_PATH, SONGS_PATH } from 'src/app/shared/classes/constans';
+import { Song } from 'src/app/shared/interfaces/song';
+import { StorageService } from 'src/app/shared/services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +12,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  constructor(private store: StorageService,
+    protected common: Common,
+    private router: Router) { }
+  selectedCategory = DEFAULT_FOLDER
+  async ngOnInit() {
 
-  ngOnInit() {
+  }
+
+  getFilteredSongs(){
+    return this.common.recordingData.filter(song => {
+      return song.category == this.selectedCategory
+    })
+  }
+
+  navigate(song: Song){
+    this.common.selectedSong = song
+    this.router.navigate(['tabs','new-song'],{ state: song })
   }
 
 }
