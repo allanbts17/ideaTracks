@@ -20,6 +20,10 @@ export class StorageService {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
     const storage = await this.storage.create();
     this._storage = storage;
+    await this.fillValues() 
+  }
+
+  async fillValues(){
     this.common.categories = await this.get(FOLDERS_PATH)
     if(this.common.categories.length == 0)
       this.common.categories.push(DEFAULT_FOLDER)
@@ -46,10 +50,10 @@ export class StorageService {
   // }
 
   async removeItemByParam(key: string, param: string, value: string) {
-    const storedData = await this.get(key) || []
+    const storedData = await this.get(key)
     var index = storedData.findIndex((obj: any) => obj[param] == value)
     storedData.splice(index, 1)
-    return this.set(key, storedData)
+    return this._storage?.set(key, storedData)
   }
 
 

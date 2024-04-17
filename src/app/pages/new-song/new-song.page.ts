@@ -29,6 +29,7 @@ export class NewSongPage implements OnInit {
   category = "Principal"
   songName = ''
   songData!: Song
+  oldSongname!: string
 
   constructor(private loading: LoadingService,
     private store: StorageService,
@@ -39,40 +40,46 @@ export class NewSongPage implements OnInit {
   }
 
   async ngOnInit() {
-
-
+    console.log('Enter onOnInit')
     let permissions = await this.checkPermissions()
     if (permissions.microphone != MicrophonePermissionStateValue.granted) {
-      this.requestPermissions()
+      await this.requestPermissions()
+    }
+    let filePermissions = await Filesystem.checkPermissions()
+    if (filePermissions.publicStorage != 'granted') {
+      const requestPermissionsResult = await Filesystem.requestPermissions();
+      console.log('requestPermissionsResult: ' + JSON.stringify(requestPermissionsResult));
     }
   }
 
   async ionViewDidEnter() {
+
+
     this.songData = this.common.selectedSong
     console.log(this.songData)
     if (this.songData) {
+      this.loading.show()
       this.category = this.songData.category
       this.songName = this.songData.song
+      this.oldSongname = this.songName
       this.recordingData = this.songData.data
-      // .map(d => {
-      //   return {
-      //     text: d.text,
-      //     path: d.path,
-      //     data: d?.data || ''
-      //   }
-      // })
       let promises: Promise<ReadFileResult>[] = []
       for (let fl of this.recordingData) {
-        promises.push(Filesystem.readFile({
-          path: fl.path,
-          directory: Directory.Documents
-        }))
+        if (fl.path != '')
+          promises.push(Filesystem.readFile({
+            path: fl.path,
+          }))
+      }
+      try {
+        let resultResult = await Promise.all(promises)
+        this.recordingData.forEach((obj, c) => {
+          obj.data = 'data:audio/aac;base64,' + <string>resultResult[c].data
+        })
+        this.loading.hide()
+      } catch (err) {
+        this.loading.hide()
       }
 
-      let resultResult = await Promise.all(promises)
-      this.recordingData.forEach((obj, c) => {
-        obj.data = <string>resultResult[c].data
-      })
     }
 
   }
@@ -128,13 +135,13 @@ export class NewSongPage implements OnInit {
       this.isRecording = false
       this.recording = await Microphone.stopRecording();
       console.log(this.recording)
-      console.log('recording: ' + JSON.stringify(this.recording));
-      console.log('recording.dataUrl: ' + JSON.stringify(this.recording.dataUrl));
-      console.log('recording.duration: ' + JSON.stringify(this.recording.duration));
-      console.log('recording.format: ' + JSON.stringify(this.recording.format));
-      console.log('recording.mimeType: ' + JSON.stringify(this.recording.mimeType));
-      console.log('recording.path: ' + JSON.stringify(this.recording.path));
-      console.log('recording.webPath: ' + JSON.stringify(this.recording.webPath));
+      // console.log('recording: ' + JSON.stringify(this.recording));
+      // console.log('recording.dataUrl: ' + JSON.stringify(this.recording.dataUrl));
+      // console.log('recording.duration: ' + JSON.stringify(this.recording.duration));
+      // console.log('recording.format: ' + JSON.stringify(this.recording.format));
+      // console.log('recording.mimeType: ' + JSON.stringify(this.recording.mimeType));
+      // console.log('recording.path: ' + JSON.stringify(this.recording.path));
+      // console.log('recording.webPath: ' + JSON.stringify(this.recording.webPath));
       // @ts-ignore
       this.webPaths.push(this.recording.webPath);
       // @ts-ignore
@@ -179,8 +186,8 @@ export class NewSongPage implements OnInit {
     }
 
     let writeResult = await Promise.all(promises)
-
-
+    if (this.oldSongname)
+      await this.store.removeItemByParam(RECORDINGS_PATH, 'song', this.oldSongname)
     await this.store.set(RECORDINGS_PATH, {
       song: this.songName,
       category: this.category,
@@ -195,6 +202,9 @@ export class NewSongPage implements OnInit {
     })
     console.log(writeResult)
     this.loading.hide()
+    this.clearData()
+    this.store.fillValues()
+    this.router.navigate(['tabs/home'])
   }
 
   clearData() {
@@ -202,6 +212,7 @@ export class NewSongPage implements OnInit {
     this.songData = un
     this.category = "Principal"
     this.songName = ''
+    this.oldSongname = un
     this.recordingData = [{
       text: '',
       path: '',

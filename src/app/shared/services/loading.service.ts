@@ -19,7 +19,9 @@ export class LoadingService {
 
 
    hide(){
-    this.loadingCtrl.dismiss()
+    setTimeout(()=>{
+      this.loadingCtrl.dismiss()
+    }, 100)
    }
 
 
