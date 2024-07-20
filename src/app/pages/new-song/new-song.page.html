@@ -1,8 +1,18 @@
 <app-header title="Nueva Canción">
-  <ion-button (click)="clearData()">
-    <ion-icon slot="icon-only" name="document"></ion-icon>
+  <ion-button  id="popover-button">
+    <ion-icon slot="icon-only" name="chevron-down-outline"></ion-icon>
   </ion-button>
 </app-header>
+<ion-popover trigger="popover-button" [dismissOnSelect]="true">
+  <ng-template>
+    <ion-content>
+      <ion-list lines="full">
+        <ion-item [button]="true" [detail]="false" (click)="disableReorder = !disableReorder">{{disableReorder? 'Activar ordenamiento':'Desactivar ordenamiento'}}</ion-item>
+        <ion-item lines="none" [button]="true" [detail]="false" (click)="clearData()">Limpiar datos</ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -25,20 +35,47 @@
     ></app-input>
   </div>
 
-  <div class="space-y-2 px-4 mt-4">
-    @for (item of recordingData; track $index) {
-    <ion-textarea
-      auto-grow="true"
-      rows="1"
-      placeholder="Puedes describir la pista aquí"
-      [(ngModel)]="item.text"
-    ></ion-textarea>
-    @if(item.data != ''){
-    <audio controls>
-      <source src="{{item.data}}" />
-      Your browser does not support the audio element.
-    </audio>
-    } }
+  <div class="space-y-2 mt-4">
+    <ion-reorder-group [disabled]="disableReorder" (ionItemReorder)="handleReorder($any($event))">
+      @for (item of recordingData; track $index; let last = $last) {
+        <ion-item lines="full" class="">
+        @if(item.data) {
+        <audio controls controlslist="noplaybackrate nodownload">
+          <source src="{{item.data}}" />
+          Your browser does not support the audio element.
+        </audio>
+        } @else {
+          <ion-textarea
+          auto-grow="true"
+          rows="1"
+          placeholder="Puedes describir la pista aquí"
+          [(ngModel)]="item.text"
+        ></ion-textarea>
+        }
+        <ion-reorder *ngIf="!last || item.data || item.text != ''" slot="end"></ion-reorder>
+        @if(disableReorder){
+          <ion-button [id]="'item-popover-'+$index" fill="clear" shape="round" *ngIf="!last || item.data || item.text != ''"  slot="end">
+            <ion-icon slot="icon-only" name="ellipsis-horizontal-circle"></ion-icon>
+          </ion-button>
+          <ion-popover *ngIf="!last || item.data || item.text != ''" [trigger]="'item-popover-'+$index" [dismissOnSelect]="true">
+            <ng-template>
+              <ion-content>
+                <ion-list lines="full">
+                  <ion-item [button]="true" [lines]="!item.data? 'none':'full'" [detail]="false" (click)="deleteItem(item,$index)">Eliminar</ion-item>
+                  <ion-item *ngIf="item.data" lines="none" [button]="true" [detail]="false" (click)="shareSong(item)">Compartir</ion-item>
+                </ion-list>
+              </ion-content>
+            </ng-template>
+          </ion-popover>
+          
+        }
+        
+        
+      </ion-item>
+      
+      }
+    </ion-reorder-group>
+    <div class="w-full h-14"></div>
   </div>
 
   <ion-fab color="danger" slot="fixed" vertical="bottom" horizontal="end" class="">

@@ -5,7 +5,8 @@ export interface Song {
 }
 
 export interface RecordingData {
-    text: string;
-    path: string;
-    data: string;
+    
+    text?: string;
+    path?: string;
+    data?: string;
 }

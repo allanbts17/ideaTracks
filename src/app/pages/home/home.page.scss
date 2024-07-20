@@ -1,0 +1,33 @@
+// audio {
+//     width: 300px; /* Ancho del reproductor */
+//     background-color: #f2f2f2; /* Color de fondo */
+//     border-radius: 10px; /* Bordes redondeados */
+//     padding: 10px; /* Espaciado interior */
+//   }
+  
+//   /* Estilo de los controles */
+//   audio::-webkit-media-controls-panel {
+//     background-color: #333; /* Color de fondo de los controles */
+//     border-radius: 5px; /* Bordes redondeados */
+//   }
+  
+//   /* Estilo de los botones de los controles */
+//   audio::-webkit-media-controls-play-button,
+//   audio::-webkit-media-controls-pause-button,
+//   audio::-webkit-media-controls-volume-slider,
+//   audio::-webkit-media-controls-mute-button {
+//     background-color: #fff; /* Color del botón */
+//     color: #333; /* Color del icono */
+//     border-radius: 50%; /* Bordes redondeados */
+//     border: none; /* Sin borde */
+//     margin: 5px; /* Espaciado exterior */
+//   }
+  
+//   /* Estilo de la barra de progreso */
+//   audio::-webkit-media-controls-current-time-display,
+//   audio::-webkit-media-controls-time-remaining-display,
+//   audio::-webkit-media-controls-timeline,
+//   audio::-webkit-media-controls-seek-back-button,
+//   audio::-webkit-media-controls-seek-forward-button {
+//     color: #fff; /* Color de la barra de progreso y del tiempo */
+//   }
