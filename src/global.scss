@@ -28,3 +28,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+app-home, app-config, app-new-song {
+  ion-content {
+    --background: #f8f8f8; // Elige el color que desees
+  }
+}
+
+
+.selected {
+  app-tab svg.stroke path, app-tab svg.stroke rect {
+    stroke: #2A6DF0 !important;
+  }
+
+  app-tab svg.fill path, app-tab svg.fill rect {
+    fill: #2A6DF0 !important;
+  }
+
+  .tab-label {
+    color: #2A6DF0 !important;
+  }
+}
+
+

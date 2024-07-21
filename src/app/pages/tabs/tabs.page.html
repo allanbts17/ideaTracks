@@ -1,20 +1,32 @@
+
 <ion-tabs>
+  <div id="tabs-container" class="flex justify-between items-center">
+    <div class="flex justify-around items-center flex-1">
+      @for (tab of tabs.slice(0,2); track $index) {
+        <div class="relative ion-activatable tab-container flex flex-col items-center justify-center" [ngClass]="{'selected':tab.selected}" (click)="selectTab(tab)">
+          <div class="absolute top-0 tab-bar"></div>
+          <app-tab [type]="tab.icon"></app-tab>
+          <div class="tab-label">{{tab.label}}</div>
+          <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        </div>
+      }
+    </div>
+    
+    <div class="pb-8 ">
+      <img id="center-img" src="../../../assets/icons/iconAdd.svg">
+    </div>
 
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home" href="/tabs/home">
-      <ion-icon aria-hidden="true" name="home"></ion-icon>
-      <ion-label>Inicio</ion-label>
-    </ion-tab-button>
+    <div class="flex justify-around items-center flex-1">
+      @for (tab of tabs.slice(2); track $index) {
+        <div class="relative ion-activatable tab-container flex flex-col items-center justify-center" [ngClass]="{'selected':tab.selected}" (click)="selectTab(tab)">
+          <div class="absolute top-0 tab-bar"></div>
+          <app-tab [type]="tab.icon"></app-tab>
+          <div class="tab-label">{{tab.label}}</div>
+          <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        </div>
+      }
+    </div>
 
-    <ion-tab-button tab="new-song" href="/tabs/new-song">
-      <ion-icon aria-hidden="true" name="musical-notes"></ion-icon>
-      <ion-label>Canción</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="config" href="/tabs/config">
-      <ion-icon aria-hidden="true" name="construct"></ion-icon>
-      <ion-label>Ajustes</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
-
+    
+  </div>
 </ion-tabs>

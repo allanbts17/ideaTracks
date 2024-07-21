@@ -20,6 +20,10 @@ const routes: Routes = [
         loadChildren: () => import('../config/config.module').then( m => m.ConfigPageModule)
       },
       {
+        path: 'mix',
+        loadChildren: () => import('../mix/mix.module').then( m => m.MixPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/home',
         pathMatch: 'full'
