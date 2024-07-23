@@ -17,6 +17,8 @@ export class HomePage implements OnInit {
     private router: Router) { }
   selectedCategory = DEFAULT_FOLDER
   async ngOnInit() {
+    this.common.categories = [ DEFAULT_FOLDER, 'Cantos']
+    this.common.songs = [ 'Día a dia', 'Elijo creer']
 
   }
 

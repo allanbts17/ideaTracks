@@ -1,7 +1,7 @@
-<app-header title="Inicio"></app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-list lines="full">
+
+<ion-content class="ion-padding-horizontal ion-padding-top">
+  <!-- <ion-list lines="full">
     <ion-item>
       <ion-select aria-label="category" placeholder="Categoría" interface="popover" [(ngModel)]="selectedCategory">
         @for(cat of common.categories; track $index){
@@ -9,16 +9,19 @@
         }
       </ion-select>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 
-  <ion-list lines="full">
+  <app-select-box selected="Principal" [values]="['Cantos','Personales','Principal']"></app-select-box>
+
+
+  <!-- <ion-list lines="full">
     @for(song of getFilteredSongs(); track $index){
       <ion-item button (click)="navigate(song)">
         <ion-label>{{song.song}}</ion-label>
       </ion-item>
     }
 
-  </ion-list>
+  </ion-list> -->
 
   <!-- <audio controls controlslist="noplaybackrate nodownload">
     <source src="../../../assets/mas.mp3" type="audio/mpeg">

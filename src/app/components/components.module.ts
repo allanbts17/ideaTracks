@@ -5,8 +5,9 @@ import { IonicModule } from '@ionic/angular';
 import { InputComponent } from './input/input.component';
 import { FormsModule } from '@angular/forms';
 import { TabComponent } from './tab/tab.component';
+import { SelectBoxComponent } from './select-box/select-box.component';
 
-const items = [HeaderComponent,InputComponent,TabComponent]
+const items = [HeaderComponent,InputComponent,TabComponent,SelectBoxComponent]
 
 @NgModule({
   declarations: [items],
