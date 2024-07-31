@@ -4,6 +4,7 @@ import { Common } from 'src/app/shared/classes/common';
 import { DEFAULT_FOLDER, FOLDERS_PATH, RECORDINGS_PATH, SONGS_PATH } from 'src/app/shared/classes/constans';
 import { Song } from 'src/app/shared/interfaces/song';
 import { StorageService } from 'src/app/shared/services/storage.service';
+import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
   selector: 'app-home',
@@ -11,10 +12,13 @@ import { StorageService } from 'src/app/shared/services/storage.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-
+  backdropId: string
   constructor(private store: StorageService,
     protected common: Common,
-    private router: Router) { }
+    private router: Router,
+  private utils: UtilsService) { 
+    this.backdropId = utils.makeId(5).toString()
+  }
   selectedCategory = DEFAULT_FOLDER
   async ngOnInit() {
     this.common.categories = [ DEFAULT_FOLDER, 'Cantos']

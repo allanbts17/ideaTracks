@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BackdropService } from 'src/app/shared/services/backdrop.service';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 
@@ -11,6 +11,7 @@ export class SelectBoxComponent implements OnInit {
   @Input() values!: string[]
   @Input() selected!: string
   @Output() selectedChange = new EventEmitter<string>();
+  @ViewChild('container') container!: ElementRef;
   opened = false
   openerId: string
   constructor(private utils: UtilsService,
@@ -37,10 +38,14 @@ export class SelectBoxComponent implements OnInit {
     if (this.opened) {
       let items = this.values.length
       div.style.height = `${items * 48 + 2}px`
-      this.backdrop.openBackdrop()
+      console.log(this.container.nativeElement)
+      this.backdrop.openBackdrop(this.container.nativeElement)
+      this.backdrop.onTap = () => {
+        this.openBox()
+      }
     } else {
       div.style.height = '40px'
-      this.backdrop.hideBackdrop()
+      this.backdrop.hideBackdrop(this.container.nativeElement)
     }
 
   }

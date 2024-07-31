@@ -1,6 +1,6 @@
 
 
-<div class=" main-container flex justify-between items-center px-4 z-10" [ngClass]="{ 'opened':opened }" (click)="openBox()">
+<div #container class=" main-container flex justify-between items-center px-4 z-10" [ngClass]="{ 'opened':opened }" (click)="openBox()">
   <div class="label align-middle flex items-center">{{selected}}</div>
   <!-- <img src="../../../assets/icons/cart.svg"> -->
   <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,4 +28,5 @@
   
 </div>
 </div>
+
 
