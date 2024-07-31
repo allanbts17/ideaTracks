@@ -20,13 +20,13 @@ export class BackdropService {
     })
   }
 
-  hideBackdrop(element: HTMLElement) {
+  hideBackdrop(element: HTMLElement, deleteTime = 200) {
     const backdrop = <HTMLElement>document.getElementsByTagName('ion-backdrop')[0]
     backdrop.style.opacity = '0'
     setTimeout(()=>{
       backdrop.remove()
       element.classList.remove('over-backdrop')
-    },220)
+    },deleteTime + 20)
   }
 
   // createSiblingElement() {

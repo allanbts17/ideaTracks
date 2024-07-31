@@ -1,42 +1,66 @@
 #tabs-container {
-    z-index: 1000;
-    width: 100%;
-    height: 65px;
-    background-color: #fff;
-    filter: drop-shadow(0px -1px 6px #0000001a);
+  z-index: 1000;
+  width: 100%;
+  height: 65px;
+  background-color: #fff;
+  filter: drop-shadow(0px -1px 6px #0000001a);
+}
+
+#tab-menu-container {
+  bottom: 20px;
+  div.menu {
+    width: 30%;
+    height: 50px;
+    border-radius: 12px;
+    opacity: 0;
+    filter: drop-shadow(0px 10px 20px rgba(0, 18, 38, 0.031372549));
+    transition: opacity 200ms ease-in-out 0s, height 250ms ease-in-out 0s, width 250ms ease-in-out 0s;
+    //transition: height 500ms ease-in-out 0s;
+    //transition: width 500ms ease-in-out 0s;
+    overflow: hidden;
+
+    .line {
+      border-bottom: rgba(42, 108, 240, 0.2);
+      border-style: solid;
+      border-bottom-width: 1px;
+    }
+
+    .label {
+        height: 50px;
+        width: 250px;
+        color: #313131
+    }
+  }
 }
 
 img#center-img {
-    height: 65px;
+  height: 65px;
 }
 
 .tab-container {
-    height: 65px;
+  height: 65px;
 }
 
 .tab-bar {
-    width: 100%;
-    height: 0px;
-    //left: -25%;
-    background-color: #2A6DF0;
-    transition: height 200ms ease-in-out 0s;
+  width: 100%;
+  height: 0px;
+  //left: -25%;
+  background-color: #2a6df0;
+  transition: height 200ms ease-in-out 0s;
 }
 
 .selected .tab-bar {
-    height: 2px;
+  height: 2px;
 }
 
 .tab-label {
-    color: #d9d9d9
+  color: #d9d9d9;
 }
 
 img {
-    color: green;
+  color: green;
 }
 
 .custom-ripple {
-    color: #47474715;
-  }
-
-
- 
+  color: #47474715;
+}

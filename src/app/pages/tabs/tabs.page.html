@@ -1,6 +1,17 @@
 
-<div id="tabs-backdrop"></div>
 <ion-tabs>
+
+  <div id="tab-menu-container" class="w-full absolute flex justify-center">
+    <div class="menu bg-white">
+      <div class="label px-4 items-center flex ion-activatable relative" (click)="newSong()">Nueva canción
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+      <div class="line"></div>
+      <div class="label px-4 items-center flex ion-activatable relative" (click)="newVideo()">Nuevo video
+        <ion-ripple-effect></ion-ripple-effect>
+      </div>
+    </div>
+  </div>
   
   <div id="tabs-container" class="flex justify-between items-center">
     <div class="flex justify-around items-center flex-1">
@@ -15,7 +26,7 @@
     </div>
     
     <div class="pb-8 ">
-      <img id="center-img" src="../../../assets/icons/iconAdd.svg">
+      <img (click)="showMenu()" id="center-img" src="../../../assets/icons/iconAdd.svg">
     </div>
 
     <div class="flex justify-around items-center flex-1">

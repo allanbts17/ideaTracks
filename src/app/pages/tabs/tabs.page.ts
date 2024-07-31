@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Common } from 'src/app/shared/classes/common';
+import { BackdropService } from 'src/app/shared/services/backdrop.service';
 
 interface Tab {
   label: string;
@@ -40,7 +41,9 @@ export class TabsPage {
       selected: false
     }
   ]
-  constructor(private router: Router, private common: Common) {
+  constructor(private router: Router,
+    private common: Common,
+    private backdrop: BackdropService) {
   }
 
   selectTab(tab: Tab){
@@ -52,6 +55,35 @@ export class TabsPage {
 
   tabBackdrop(ev: any){
     console.log(ev)
+  }
+
+  showMenu(){
+    let constainer = <HTMLElement>document.getElementById('tab-menu-container')
+    let menu = <HTMLElement>constainer.getElementsByClassName('menu')[0]
+    this.backdrop.openBackdrop(constainer)
+    this.backdrop.onTap = () => {
+      this.hideMenu()
+    }
+    menu.style.width = '60%'
+    menu.style.height = '100px'
+    menu.style.opacity = '1'
+  }
+
+  hideMenu(){
+    let constainer = <HTMLElement>document.getElementById('tab-menu-container')
+    let menu = <HTMLElement>constainer.getElementsByClassName('menu')[0]
+    this.backdrop.hideBackdrop(constainer, 250)
+    menu.style.width = '30%'
+    menu.style.height = '50px'
+    menu.style.opacity = '0'
+  }
+
+  newSong(){
+    this.hideMenu()
+  }
+
+  newVideo(){
+    this.hideMenu()
   }
 
 }
