@@ -72,7 +72,7 @@ export class TabsPage {
   hideMenu(){
     let constainer = <HTMLElement>document.getElementById('tab-menu-container')
     let menu = <HTMLElement>constainer.getElementsByClassName('menu')[0]
-    this.backdrop.hideBackdrop(constainer, 250)
+    this.backdrop.hideBackdrop(constainer)
     menu.style.width = '30%'
     menu.style.height = '50px'
     menu.style.opacity = '0'
@@ -80,6 +80,8 @@ export class TabsPage {
 
   newSong(){
     this.hideMenu()
+    this.tabs.forEach(tab => tab.selected = false)
+    this.router.navigateByUrl('tabs/new-song')
   }
 
   newVideo(){
