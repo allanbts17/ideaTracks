@@ -13,7 +13,10 @@
 
   <app-select-box selected="Principal" [values]="['Cantos','Personales','Principal']"></app-select-box>
 
-
+  @for (song of common.songs; track $index) {
+    <div class="mt-4"></div>
+    <app-song-item [title]="song" [tracks]="5"></app-song-item>
+  }
   <!-- <ion-list lines="full">
     @for(song of getFilteredSongs(); track $index){
       <ion-item button (click)="navigate(song)">

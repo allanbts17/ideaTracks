@@ -15,25 +15,27 @@
 </ion-popover>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div class="space-y-2 px-4 mt-8">
+<button (click)="processAudio()">Process Audio</button>
+
+  <div class=" px-4 mt-4">
     <app-input
       label="Nombre"
       hintText="Ingrese el nombre"
-      [(value)]="songName"
+      [(selected)]="songName"
     ></app-input>
+    <div class="mt-4"></div>
     <app-input
       label="Categoría"
       hintText="Ingrese la categoría"
-      [(value)]="category"
-      [selectorList]="common.categories"
+      [(selected)]="category"
+      [values]="common.categories"
     ></app-input>
+    <div class="mt-4"></div>
+    <app-track-item [waveForm]="testSong" [audioSrc]="'../../../assets/mas.mp3'"></app-track-item>
   </div>
+
+ 
 
   <div class="space-y-2 mt-4">
     <ion-reorder-group [disabled]="disableReorder" (ionItemReorder)="handleReorder($any($event))">

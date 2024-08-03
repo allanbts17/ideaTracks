@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-song-item',
@@ -6,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./song-item.component.scss'],
 })
 export class SongItemComponent  implements OnInit {
+  @Input() title!: string
+  @Input() tracks!: number
+  trackText!: string
+  constructor(private router: Router) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.trackText = `${this.tracks.toString()} ${this.tracks == 1? 'pista':'pistas'}`
+  }
 
-  ngOnInit() {}
+  navigate(){
+    
+  }
 
 }

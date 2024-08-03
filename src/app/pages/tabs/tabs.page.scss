@@ -33,8 +33,29 @@
   }
 }
 
-img#center-img {
+img#addIcon,img#recIcon,img#stopIcon {
+  transition: opacity 200ms ease-in-out 0s;
+}
+
+img#addIcon {
+  opacity: 1;
+}
+
+img#recIcon,img#stopIcon {
+  opacity: 0;
+}
+
+.center-img-container {
   height: 65px;
+  width: 65px;
+  overflow: hidden;
+  position: relative;
+  img {
+    top: 0px;
+    left: 0px;
+    height: 65px;
+    position: absolute;
+  }
 }
 
 .tab-container {

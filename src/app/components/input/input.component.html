@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="omrs-input-group">
   <label class="omrs-input-filled">
     <input required class="custom" [(ngModel)]="value" (ngModelChange)="valueChange.emit($event)">
@@ -18,26 +18,51 @@
 header="Selecciona la categoría"
 [buttons]="alertButtons"
 [inputs]="getSelectorMap()"
-></ion-alert>
+></ion-alert> -->
+<div class="title">{{label}}</div>
+<div
+  #container
+  class="my-1 main-container flex justify-between items-center pl-4 z-10" [ngClass]="{'focused':onFocus, 'opened':opened}"
+  [ngClass]="{ opened: opened }"
+>
+  <input
+    class="label align-middle flex items-center bg-transparent flex-1"
+    [(ngModel)]="selected"
+    (focus)="onFocus = true"
+    (blur)="onFocus = false"
+    (ngModelChange)="selectedChange.emit($event)"
+  />
+  @if(values.length > 0){
+    <div (click)="openBox()" class="svg-container flex justify-center items-center ion-activatable relative overflow-hidden">
+      <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <mask id="mask0_14_18" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="2" width="13"
+            height="8">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M12.3498 2.7258C12.0542 2.42477 11.575 2.42477 11.2794 2.7258L6.76852 7.31955L2.25764 2.7258C1.96205 2.42477 1.4828 2.42477 1.1872 2.7258C0.891608 3.02682 0.891608 3.51488 1.1872 3.8159L6.76852 9.49976L12.3498 3.8159C12.6454 3.51488 12.6454 3.02682 12.3498 2.7258Z"
+                fill="#006FFD" />
+        </mask>
+        <g mask="url(#mask0_14_18)">
+            <rect x="0.713196" y="-0.000793457" width="12.1106" height="11.9995"  />
+        </g>
+      </svg>
+      <ion-ripple-effect></ion-ripple-effect>
+    </div>
+  } 
+  
 
+  <div class="absolute top-0 background bg-white"></div>
 
-	
-
-
-
-<!-- <div class="omrs-input-group">
-  <label class="omrs-input-filled omrs-input-danger">
-    <input required>
-    <span class="omrs-input-label">Danger</span>
-    <span class="omrs-input-helper">Helper Text</span>
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-6c.78 2.34 2.72 4 5 4s4.22-1.66 5-4H7z"/></svg>
-  </label>
+  <div [id]="openerId" class="opener-container absolute top-0 bg-white">
+    <div class="label mx-4">{{ selected }}</div>
+    <div class="line"></div>
+    @for(item of values; track $index){
+    <div
+      class="px-4 item flex items-center align-middle relative ion-activatable"
+      (click)="selectItem(item)"
+    >
+      {{ item }}
+      <ion-ripple-effect></ion-ripple-effect>
+    </div>
+    }
+  </div>
 </div>
-<div class="omrs-input-group">
-  <label class="omrs-input-underlined">
-    <input required disabled>
-    <span class="omrs-input-label">Danger</span>
-    <span class="omrs-input-helper">Helper Text</span>
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle cx="15.5" cy="9.5" r="1.5"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-5-6c.78 2.34 2.72 4 5 4s4.22-1.66 5-4H7z"/></svg>
-  </label>
-</div> -->

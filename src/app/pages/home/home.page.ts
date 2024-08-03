@@ -18,12 +18,19 @@ export class HomePage implements OnInit {
     private router: Router,
   private utils: UtilsService) { 
     this.backdropId = utils.makeId(5).toString()
+    
   }
   selectedCategory = DEFAULT_FOLDER
   async ngOnInit() {
+    
     this.common.categories = [ DEFAULT_FOLDER, 'Cantos']
     this.common.songs = [ 'Día a dia', 'Elijo creer']
+    //this.common.changeCenterImage('add')
+  }
 
+  ionViewDidEnter(){
+    console.log('initi')
+    this.common.changeCenterImage('add')
   }
 
   getFilteredSongs(){

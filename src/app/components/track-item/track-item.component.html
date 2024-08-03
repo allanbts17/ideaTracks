@@ -1,0 +1,24 @@
+<div class="container flex justify-between bg-white items-center">
+  <div class="waveform-container flex-1 flex space-x-1 items-center">
+    
+    @for(item of percentages; track $index){
+      <div class="item flex-1 rounded-full" [ngStyle]="{'height': item}"></div>
+    }
+  </div>
+  <svg (click)="playing? stopSong():playSong()"
+    class="flex-none"
+    width="28"
+    height="28"
+    viewBox="0 0 28 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M23.1432 14.848C23.7699 14.4563 23.7699 13.5437 23.1432 13.152L7.36334 3.2896C6.69729 2.87332 5.83334 3.35216 5.83334 4.1376V23.8624C5.83334 24.6479 6.69729 25.1267 7.36334 24.7104L23.1432 14.848Z"
+      [attr.fill]="playing? '#2A6DF0':'#D9D9D9'"
+    />
+  </svg>
+</div>
+<audio [id]="audioId">
+  <source [src]="audioSrc" type="audio/mpeg">
+</audio>

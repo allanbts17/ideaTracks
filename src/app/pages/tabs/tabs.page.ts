@@ -69,6 +69,20 @@ export class TabsPage {
     menu.style.opacity = '1'
   }
 
+  centerImageAction(){
+    if(this.common.centerImage == 'add'){
+      this.showMenu()
+    } else if((this.common.centerImage == 'rec')){
+      let constainer = <HTMLElement>document.getElementById('tab-menu-container')
+      this.backdrop.openBackdrop(constainer)
+      this.common.changeCenterImage('stop')
+    } else {
+      this.common.changeCenterImage('rec')
+      let constainer = <HTMLElement>document.getElementById('tab-menu-container')
+      this.backdrop.hideBackdrop(constainer)
+    }
+  }
+
   hideMenu(){
     let constainer = <HTMLElement>document.getElementById('tab-menu-container')
     let menu = <HTMLElement>constainer.getElementsByClassName('menu')[0]
@@ -76,6 +90,9 @@ export class TabsPage {
     menu.style.width = '30%'
     menu.style.height = '50px'
     menu.style.opacity = '0'
+    this.backdrop.onTap = () => {
+      //this.hideMenu()
+    }
   }
 
   newSong(){

@@ -32,6 +32,38 @@ export class NewSongPage implements OnInit {
   oldSongname!: string
   disableReorder = true
   deletedAudio: RecordingData[] = []
+  testSong = [
+    0.016184531151553397,
+    0.017841611180880172,
+    0.018356713905199204,
+    0.013041050548682797,
+    0.020262153866186104,
+    0.023508937079115885,
+    0.013171334686182251,
+    0.021165847530217715,
+    0.012415849609698928,
+    0.013206741199543385,
+    0.0164722133304893,
+    0.03549864487474137,
+    0.020968917799951265,
+    0.020279958571054836,
+    0.031368221840458906,
+    0.021655172599104027,
+    0.01450641636444283,
+    0.02383029605817379,
+    0.023624907240969713,
+    0.030823091214946426,
+    0.02516797873818801,
+    0.021577931395630186,
+    0.014101950122663055,
+    0.021328477368930752,
+    0.020846696949449604,
+    0.01204162583980004,
+    0.020173511332888548,
+    0.0149811039126119,
+    0.0045874016653475475,
+    0.0002507525880836647
+]
 
   constructor(private loading: LoadingService,
     private store: StorageService,
@@ -44,6 +76,7 @@ export class NewSongPage implements OnInit {
 
   async ngOnInit() {
     console.log('Enter onOnInit')
+
     //Ffmpeg('../../../assets/mas.mp3').format('m4a')
     let permissions = await this.checkPermissions()
     if (permissions.microphone != MicrophonePermissionStateValue.granted) {
@@ -56,9 +89,47 @@ export class NewSongPage implements OnInit {
     }
   }
 
+  processAudio() {
+    let audioElement = document.getElementById('dataAu');
+    let audioContext = new window.AudioContext();
+    let sourceUrl = audioElement?.querySelector('source')?.src as string | URL | Request;
+
+    fetch(sourceUrl)
+      .then(response => response.arrayBuffer())
+      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+      .then(audioBuffer => {
+        let quantizedData = this.quantizeAudioData(audioBuffer, 30);
+        console.log(quantizedData);
+      })
+      .catch(error => console.error('Error processing audio:', error));
+  }
+
+  quantizeAudioData(buffer:any, numElements:any) {
+    let data = buffer.getChannelData(0); // Obtener datos del canal izquierdo
+    console.log('raw decoded data',data)
+    let segmentLength = Math.floor(data.length / numElements);
+    let quantizedData = [];
+
+    for (let i = 0; i < numElements; i++) {
+      let start = i * segmentLength;
+      let end = start + segmentLength;
+      let segment = data.slice(start, end);
+      let sum = 0;
+
+      for (let j = 0; j < segment.length; j++) {
+        sum += Math.abs(segment[j]);
+      }
+
+      let avg = sum / segment.length;
+      quantizedData.push(avg);
+    }
+
+    return quantizedData;
+  }
+
   async ionViewDidEnter() {
 
-
+    this.common.changeCenterImage('rec')
     this.songData = this.common.selectedSong
     console.log(this.songData)
     if (this.songData) {
@@ -75,12 +146,12 @@ export class NewSongPage implements OnInit {
             path: fl.path,
           }))
         else
-          promises.push(Promise.resolve({ data: ''}))
+          promises.push(Promise.resolve({ data: '' }))
       }
       try {
         let resultResult = await Promise.all(promises)
         this.recordingData.forEach((obj, c) => {
-          if(obj.path)
+          if (obj.path)
             obj.data = 'data:audio/aac;base64,' + <string>resultResult[c].data
         })
         this.recordingData.push({
@@ -110,9 +181,9 @@ export class NewSongPage implements OnInit {
     // where the gesture ended. This method can also be called directly
     // by the reorder group
     this.recordingData = ev.detail.complete(this.recordingData);
-    if(
-      !this.recordingData[this.recordingData.length -1].text ||
-      this.recordingData[this.recordingData.length -1].text && this.recordingData[this.recordingData.length -1].text != ''){
+    if (
+      !this.recordingData[this.recordingData.length - 1].text ||
+      this.recordingData[this.recordingData.length - 1].text && this.recordingData[this.recordingData.length - 1].text != '') {
       this.recordingData.push({ text: '' })
     }
     //console.log('Array',Object.assign({},this.recordingData))
@@ -150,23 +221,23 @@ export class NewSongPage implements OnInit {
     console.log('cliock')
   }
 
-  deleteItem(item: RecordingData, index: number){
-    if(this.recordingData.length > 1){
+  deleteItem(item: RecordingData, index: number) {
+    if (this.recordingData.length > 1) {
       this.recordingData.splice(index, 1);
-      if(item.path?.includes('storage/emulated/0/Documents'))
+      if (item.path?.includes('storage/emulated/0/Documents'))
         this.deletedAudio.push(item)
     }
   }
 
-  async shareSong(item: RecordingData){
+  async shareSong(item: RecordingData) {
     let result = await Filesystem.writeFile({
       directory: Directory.Cache,
-      path:`${MAIN_DIRECTORY}/CACHE/${this.utils.makeId(5)}.m4a`,
+      path: `${MAIN_DIRECTORY}/CACHE/${this.utils.makeId(5)}.m4a`,
       data: <string>item.data,
       recursive: true
     })
-    
-    console.log('URL',result.uri)
+
+    console.log('URL', result.uri)
     await Share.share({
       files: [result.uri],
     });
@@ -192,7 +263,7 @@ export class NewSongPage implements OnInit {
     }
   }
 
-  removeEmptyText(){
+  removeEmptyText() {
     this.recordingData = this.recordingData.filter(data => {
       return data.path || data.text != ''
     })
@@ -274,7 +345,7 @@ export class NewSongPage implements OnInit {
           })
         )
       } else {
-        promises.push(Promise.resolve({ uri: ''}))
+        promises.push(Promise.resolve({ uri: '' }))
       }
 
       c = c + 1
@@ -289,8 +360,8 @@ export class NewSongPage implements OnInit {
       data: this.recordingData.map((data, c) => {
         return {
           text: data.text,
-          path: data.path? writeResult[c].uri :undefined,
-          data: data.path? '':undefined
+          path: data.path ? writeResult[c].uri : undefined,
+          data: data.path ? '' : undefined
         }
         //data.data != ''? `${MAIN_DIRECTORY}/${this.category}-${this.songName}-${c}.m4a`:''
       })
