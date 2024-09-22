@@ -1,8 +1,9 @@
 <div class="container flex justify-between bg-white items-center">
-  <div class="waveform-container flex-1 flex space-x-1 items-center">
-    
+  <div class="counter">{{currentTime}} / {{totalTime}}</div>
+  <div class="waveform-container flex-1 flex space-x-0.5 items-center relative">
+      <div #slider class="slide absolute w-full h-full" (click)="onClick($event)"></div>
     @for(item of percentages; track $index){
-      <div class="item flex-1 rounded-full" [ngStyle]="{'height': item}"></div>
+      <div class="item flex-1 rounded-full" [ngStyle]="{'height': item.percent, 'background': item.active? '#2A6DF0':'#D9D9D9'}"></div>
     }
   </div>
   <svg (click)="playing? stopSong():playSong()"
@@ -19,6 +20,6 @@
     />
   </svg>
 </div>
-<audio [id]="audioId">
+<audio #trackAudio [id]="audioId">
   <source [src]="audioSrc" type="audio/mpeg">
 </audio>
