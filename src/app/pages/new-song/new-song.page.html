@@ -3,7 +3,7 @@
     <ion-icon slot="icon-only" name="chevron-down-outline"></ion-icon>
   </ion-button>
 </app-header>
-<ion-popover trigger="popover-button" [dismissOnSelect]="true">
+<!-- <ion-popover trigger="popover-button" [dismissOnSelect]="true">
   <ng-template>
     <ion-content>
       <ion-list lines="full">
@@ -12,11 +12,11 @@
       </ion-list>
     </ion-content>
   </ng-template>
-</ion-popover>
+</ion-popover> -->
 
 <ion-content [fullscreen]="true">
 
-<button (click)="processAudio()">Process Audio</button>
+<!-- <button (click)="processAudio()">Process Audio</button> -->
 
   <div class=" px-4 mt-4">
     <app-input
@@ -33,11 +33,15 @@
     ></app-input>
     <div class="mt-4"></div>
     <app-track-item [waveForm]="testSong" [audioSrc]="'../../../assets/mas.mp3'"></app-track-item>
+    <div class="mt-4"></div>
+    <app-text-item></app-text-item>
+    <div class="mt-4"></div>
+    <app-text-item [inputText]="true"></app-text-item>
   </div>
 
  
 
-  <div class="space-y-2 mt-4">
+  <!-- <div class="space-y-2 mt-4">
     <ion-reorder-group [disabled]="disableReorder" (ionItemReorder)="handleReorder($any($event))">
       @for (item of recordingData; track $index; let last = $last) {
         <ion-item lines="full" class="">
@@ -100,5 +104,5 @@
     <ion-fab-button (click)="saveData()" size="small">
       <ion-icon name="save"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 </ion-content>

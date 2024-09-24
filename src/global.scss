@@ -86,3 +86,17 @@ ion-backdrop {
   position: relative;
   z-index: 3;
 }
+
+div#backdrop-counter {
+  transition: opacity 200ms ease-in-out 0s;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  position: absolute;
+  z-index: 4;
+  font-size: 80px;
+  color: white;
+}

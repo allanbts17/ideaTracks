@@ -74,7 +74,7 @@ export class TabsPage {
       this.showMenu()
     } else if((this.common.centerImage == 'rec')){
       let constainer = <HTMLElement>document.getElementById('tab-menu-container')
-      this.backdrop.openBackdrop(constainer)
+      this.backdrop.openBackdropWithCounter(constainer)
       this.common.changeCenterImage('stop')
     } else {
       this.common.changeCenterImage('rec')

@@ -8,6 +8,7 @@ import { TabComponent } from './tab/tab.component';
 import { SelectBoxComponent } from './select-box/select-box.component';
 import { SongItemComponent } from './song-item/song-item.component';
 import { TrackItemComponent } from './track-item/track-item.component';
+import { TextItemComponent } from './text-item/text-item.component';
 
 const items = [
   HeaderComponent,
@@ -16,7 +17,8 @@ const items = [
   SelectBoxComponent,
   HeaderComponent,
   SongItemComponent,
-  TrackItemComponent
+  TrackItemComponent,
+  TextItemComponent
 ]
 
 @NgModule({
