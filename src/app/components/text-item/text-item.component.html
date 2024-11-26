@@ -1,8 +1,15 @@
 <div class="container flex justify-center bg-white items-center">
   @if(inputText){
-    <textarea  placeholder="Escribe tu texto aquí..." class="kalign-middle flex items-center bg-transparent flex-1" ></textarea>
+    <textarea #textArea placeholder="Escribe tu texto aquí..." [(ngModel)]="text" (ngModelChange)="inputDetection()" class="align-middle flex items-center bg-transparent flex-1" ></textarea>
+    
   } @else {
-    <div class="align-middle flex items-center bg-transparent flex-1" >{{text}}</div>
+    <div class="align-middle flex items-center bg-transparent flex-1 break-word" style="white-space: pre-line;" >{{text}}</div>
   }
   
 </div>
+<div *ngIf="inputText" class="fixed text-item-test-container my-4 container flex justify-center bg-white items-center break-word">
+  <div #testContainer class="align-middle flex items-center bg-transparent flex-1" style="white-space: pre-line;" >{{text}}</div>
+</div>
+
+
+

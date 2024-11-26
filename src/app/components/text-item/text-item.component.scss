@@ -5,7 +5,8 @@
     padding: 13px;
     padding-left: 12px;
     textarea {
-        height: 70px;
+        height: 47px;
+        // height: 23.5px;
         outline: none; /* Elimina el borde de foco */
     }
     textarea::placeholder {
@@ -13,3 +14,13 @@
     }
   }
   
+  .text-item-test-container {
+    opacity: 0;
+  }
+
+  .break-word {
+    overflow-wrap: break-word; /* Rompe las palabras largas */
+    word-wrap: break-word;    /* Compatibilidad con navegadores antiguos */
+    word-break: break-word;   /* Opcional, más control en algunos casos */
+    hyphens: auto;
+  }
