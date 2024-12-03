@@ -41,6 +41,7 @@ export class TabsPage {
       selected: false
     }
   ]
+  menuOpened = false
   constructor(private router: Router,
     private common: Common,
     private backdrop: BackdropService) {
@@ -58,6 +59,7 @@ export class TabsPage {
   }
 
   showMenu(){
+    if(this.menuOpened) return
     let constainer = <HTMLElement>document.getElementById('tab-menu-container')
     let menu = <HTMLElement>constainer.getElementsByClassName('menu')[0]
     this.backdrop.openBackdrop(constainer)
@@ -67,6 +69,7 @@ export class TabsPage {
     menu.style.width = '60%'
     menu.style.height = '100px'
     menu.style.opacity = '1'
+    this.menuOpened = true
   }
 
   centerImageAction(){
@@ -84,6 +87,7 @@ export class TabsPage {
   }
 
   hideMenu(){
+    this.menuOpened = false
     let constainer = <HTMLElement>document.getElementById('tab-menu-container')
     let menu = <HTMLElement>constainer.getElementsByClassName('menu')[0]
     this.backdrop.hideBackdrop(constainer)

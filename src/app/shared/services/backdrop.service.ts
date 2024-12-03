@@ -56,6 +56,7 @@ export class BackdropService {
       if(this.haveCounter){
         const counter = <HTMLElement>document.getElementById('backdrop-counter')
         counter.remove()
+        this.haveCounter = false
       }
     },deleteTime + 20)
   }
