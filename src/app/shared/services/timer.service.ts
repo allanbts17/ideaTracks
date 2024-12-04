@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
+import { interval, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -10,24 +10,33 @@ export class TimerService {
   private seconds: number = 0;
   stopwatchString: string = '00:00';
   private timerSubscription: Subscription | undefined;
+  private _timerObs$!: Observable<number> //= new Observable<string>()
+  get timerObs$ (){ return  this._timerObs$ }
+  constructor() { 
+    
+  }
 
-  constructor() { }
+  start(){
+    this._timerObs$ = interval(1000)
+  }
 
   startStopwatch() {
-    if (!this.timerSubscription) {
-      this.timerSubscription = interval(1000).pipe(
-        map(() => {
-          this.seconds++;
-          if (this.seconds === 60) {
-            this.seconds = 0;
-            this.minutes++;
-          }
-          return `${this.addZero(this.minutes)}:${this.addZero(this.seconds)}`;
-        })
-      ).subscribe(stopwatchString => {
-        this.stopwatchString = stopwatchString;
-      });
-    }
+    // if (!this.timerSubscription) {
+    //   this._timerObs$ = interval(1000).pipe(
+    //     map((d) => {
+    //       this.seconds++;
+    //       if (this.seconds === 60) {
+    //         this.seconds = 0;
+    //         this.minutes++;
+    //       }
+    //       d.toString()
+    //       return `${this.addZero(this.minutes)}:${this.addZero(this.seconds)}`;
+    //     })
+    //   )
+    //   this.timerSubscription = this._timerObs$.subscribe(stopwatchString => {
+    //     this.stopwatchString = stopwatchString;
+    //   });
+    // }
   }
 
   stopStopwatch() {

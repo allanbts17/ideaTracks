@@ -132,7 +132,7 @@ export class NewSongPage implements OnInit {
     this.common.changeCenterImage('rec')
     this.songData = this.common.selectedSong
     console.log(this.songData)
-    if (this.songData) {
+    if (this.songData) { 
       this.loading.show()
       this.category = this.songData.category
       this.songName = this.songData.song
@@ -274,9 +274,9 @@ export class NewSongPage implements OnInit {
     try {
       //this.loading.show()
       this.isRecording = true
-      this.timer.resetStopwatch()
+      //this.timer.resetStopwatch()
       const startRecordingResult = await Microphone.startRecording();
-      this.timer.startStopwatch()
+      //this.timer.startStopwatch()
       console.log(startRecordingResult)
       console.log('startRecordingResult: ' + JSON.stringify(startRecordingResult));
       //this.loading.hide()
@@ -292,7 +292,7 @@ export class NewSongPage implements OnInit {
     try {
       //this.loading.show()
 
-      this.timer.stopStopwatch()
+      //this.timer.stopStopwatch()
       this.isRecording = false
       this.recording = await Microphone.stopRecording();
       console.log(this.recording)
