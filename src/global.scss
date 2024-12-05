@@ -35,6 +35,10 @@ app-home, app-config, app-new-song {
   }
 }
 
+ion-app {
+  background: #fcfcfc;
+}
+
 
 .selected {
   app-tab svg.stroke path, app-tab svg.stroke rect {
