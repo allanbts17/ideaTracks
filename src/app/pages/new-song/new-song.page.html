@@ -1,7 +1,14 @@
-<app-header title="Nueva Canción">
-  <ion-button  id="popover-button">
-    <ion-icon slot="icon-only" name="chevron-down-outline"></ion-icon>
-  </ion-button>
+<app-header [title]="songData? 'Editar Canción':'Nueva Canción'">
+  <ion-buttons slot="start">
+    <ion-button>
+      <ion-icon slot="icon-only" name="swap-vertical-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-buttons slot="end">
+    <ion-button (click)="saveData()">
+      <ion-icon slot="icon-only" name="save"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </app-header>
 <!-- <ion-popover trigger="popover-button" [dismissOnSelect]="true">
   <ng-template>
@@ -31,14 +38,22 @@
       [(selected)]="category"
       [values]="common.categories"
     ></app-input>
-    <div class="mt-4"></div>
+    @for (item of recordingData; track $index) {
+      <div class="mt-4"></div>
+      @if(item.text){
+        <app-text-item [text]="item.text"></app-text-item>
+      } 
+      @if(item.data) {
+        <app-track-item [waveForm]="testSong" [audioSrc]="item.data"></app-track-item>
+      }
+    }
+    <!-- <div class="mt-4"></div>
     <app-track-item [waveForm]="testSong" [audioSrc]="'../../../assets/mas.mp3'"></app-track-item>
     <div class="mt-4"></div>
     <app-text-item></app-text-item>
+    <div class="mt-4"></div> -->
     <div class="mt-4"></div>
-    <app-text-item [inputText]="true" text=""></app-text-item>
-    <div class="mt-4"></div>
-    <app-text-item [inputText]="true" text=""></app-text-item>
+    <app-text-item [inputText]="true" (textAddEvent)="textAdded($event)"></app-text-item>
   </div>
 
  

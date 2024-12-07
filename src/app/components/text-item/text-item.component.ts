@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, Output } from '@angular/core';
 
 @Component({
   selector: 'app-text-item',
@@ -7,19 +7,26 @@ import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef } from '@
 })
 export class TextItemComponent  implements OnInit {
   @Input() inputText: boolean = false
-  @Input() text = `Show the status bar. On iOS, if the status bar is initially hidden and the initial style is set to UIStatusBarStyleLightContent, first show call might present a glitch on the animation showing the text as dark and then transition to light. It's recommended to use Animation.None as the animation on the first call.`
+  @Input() text = ""
   @Input() textEvent = new EventEmitter<string>()
   @ViewChild('textArea') textArea!: ElementRef 
   @ViewChild('testContainer') testContainer!: ElementRef 
+  @Output() textAddEvent = new EventEmitter<string>()
+  showAddTextIcon = false
   constructor() { }
 
   ngOnInit() {}
 
   inputDetection(){
+    if(this.text != "")
+      this.showAddTextIcon = true
+    else
+      this.showAddTextIcon = false
     let test: HTMLElement = this.testContainer.nativeElement
     let textArea: HTMLElement = this.textArea.nativeElement
     let testParent: HTMLElement = test.parentElement as HTMLElement
     testParent.style.width = textArea.parentElement?.clientWidth.toString() + 'px'
+
     setTimeout(()=>{
       let height = test.clientHeight
       console.log(height)
@@ -29,6 +36,13 @@ export class TextItemComponent  implements OnInit {
         textArea.style.height = '47px'
     })
     
+  }
+
+  addText(){
+    this.textAddEvent.emit(this.text)
+    this.text = ""
+    this.inputDetection()
+    this.showAddTextIcon = false
   }
 
 }

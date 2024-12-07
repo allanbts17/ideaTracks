@@ -1,12 +1,13 @@
 <div class="container flex justify-center bg-white items-center">
   @if(inputText){
     <textarea #textArea placeholder="Escribe tu texto aquí..." [(ngModel)]="text" (ngModelChange)="inputDetection()" class="align-middle flex items-center bg-transparent flex-1" ></textarea>
-    
+    <ion-icon *ngIf="showAddTextIcon" class="icon" name="add-circle" (click)="addText()"></ion-icon>
   } @else {
     <div class="align-middle flex items-center bg-transparent flex-1 break-word" style="white-space: pre-line;" >{{text}}</div>
   }
   
 </div>
+
 <div *ngIf="inputText" class="fixed text-item-test-container my-4 container flex justify-center bg-white items-center break-word">
   <div #testContainer class="align-middle flex items-center bg-transparent flex-1" style="white-space: pre-line;" >{{text}}</div>
 </div>

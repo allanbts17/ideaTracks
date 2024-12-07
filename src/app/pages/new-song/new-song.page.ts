@@ -4,13 +4,14 @@ import { RecordingData, Song } from 'src/app/shared/interfaces/song';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { Filesystem, Directory, Encoding, WriteFileResult, ReadFileResult } from '@capacitor/filesystem';
 import { StorageService } from 'src/app/shared/services/storage.service';
-import { FOLDERS_PATH, MAIN_DIRECTORY, RECORDINGS_PATH, SONGS_PATH } from 'src/app/shared/classes/constans';
+import { Actions, DEFAULT_FOLDER, FOLDERS_PATH, MAIN_DIRECTORY, RECORDINGS_PATH, SONGS_PATH } from 'src/app/shared/classes/constans';
 import { TimerService } from 'src/app/shared/services/timer.service';
 import { Common } from 'src/app/shared/classes/common';
 import { Router } from '@angular/router';
 import { ItemReorderEventDetail } from '@ionic/angular';
 import { Share } from '@capacitor/share';
 import { UtilsService } from 'src/app/shared/services/utils.service';
+import { Subscription } from 'rxjs';
 //var Ffmpeg = require('fluent-ffmpeg');
 //import * as Ffmpeg from 'fluent-ffmpeg'
 @Component({
@@ -20,18 +21,20 @@ import { UtilsService } from 'src/app/shared/services/utils.service';
 })
 export class NewSongPage implements OnInit {
   recording!: AudioRecording;
-  recordingData: RecordingData[] = [{
-    text: ''
-  }]
+  recordingData: RecordingData[] = []
+  //  [{
+  //   text: ''
+  // }]
   isRecording = false
 
 
-  category = "Principal"
+  category = DEFAULT_FOLDER
   songName = ''
   songData!: Song
   oldSongname!: string
   disableReorder = true
   deletedAudio: RecordingData[] = []
+  actionSubscription!: Subscription
   testSong = [
     0.016184531151553397,
     0.017841611180880172,
@@ -89,45 +92,69 @@ export class NewSongPage implements OnInit {
     }
   }
 
-  processAudio() {
-    let audioElement = document.getElementById('dataAu');
-    let audioContext = new window.AudioContext();
-    let sourceUrl = audioElement?.querySelector('source')?.src as string | URL | Request;
 
-    fetch(sourceUrl)
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-      .then(audioBuffer => {
-        let quantizedData = this.quantizeAudioData(audioBuffer, 30);
-        console.log(quantizedData);
-      })
-      .catch(error => console.error('Error processing audio:', error));
+
+  textAdded(text: string){
+    this.recordingData.push({
+      text: text
+    })
+    console.log(this.recordingData)
   }
 
-  quantizeAudioData(buffer:any, numElements:any) {
-    let data = buffer.getChannelData(0); // Obtener datos del canal izquierdo
-    console.log('raw decoded data',data)
-    let segmentLength = Math.floor(data.length / numElements);
-    let quantizedData = [];
+  // processAudio() {
+  //   let audioElement = document.getElementById('dataAu');
+  //   let audioContext = new window.AudioContext();
+  //   let sourceUrl = audioElement?.querySelector('source')?.src as string | URL | Request;
 
-    for (let i = 0; i < numElements; i++) {
-      let start = i * segmentLength;
-      let end = start + segmentLength;
-      let segment = data.slice(start, end);
-      let sum = 0;
+  //   fetch(sourceUrl)
+  //     .then(response => response.arrayBuffer())
+  //     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+  //     .then(audioBuffer => {
+  //       let quantizedData = this.quantizeAudioData(audioBuffer, 30);
+  //       console.log(quantizedData);
+  //     })
+  //     .catch(error => console.error('Error processing audio:', error));
+  // }
 
-      for (let j = 0; j < segment.length; j++) {
-        sum += Math.abs(segment[j]);
-      }
+  // quantizeAudioData(buffer:any, numElements:any) {
+  //   let data = buffer.getChannelData(0); // Obtener datos del canal izquierdo
+  //   console.log('raw decoded data',data)
+  //   let segmentLength = Math.floor(data.length / numElements);
+  //   let quantizedData = [];
 
-      let avg = sum / segment.length;
-      quantizedData.push(avg);
-    }
+  //   for (let i = 0; i < numElements; i++) {
+  //     let start = i * segmentLength;
+  //     let end = start + segmentLength;
+  //     let segment = data.slice(start, end);
+  //     let sum = 0;
 
-    return quantizedData;
+  //     for (let j = 0; j < segment.length; j++) {
+  //       sum += Math.abs(segment[j]);
+  //     }
+
+  //     let avg = sum / segment.length;
+  //     quantizedData.push(avg);
+  //   }
+
+  //   return quantizedData;
+  // }
+  ionViewDidLeave(){
+    this.actionSubscription.unsubscribe()
+    let un: any = undefined
+    this.common.selectedSong = un
+    console.log("leaving")
+    this.clearData()
   }
 
   async ionViewDidEnter() {
+
+    this.actionSubscription = this.common.$actions.subscribe(action => {
+      if(action == Actions.START_AUDIO_REC){
+        this.startRecording()
+      } else if(action == Actions.STOP_AUDIO_REC) {
+        this.stopRecording()
+      }
+    })
 
     this.common.changeCenterImage('rec')
     this.songData = this.common.selectedSong
@@ -148,15 +175,18 @@ export class NewSongPage implements OnInit {
         else
           promises.push(Promise.resolve({ data: '' }))
       }
+      
       try {
         let resultResult = await Promise.all(promises)
         this.recordingData.forEach((obj, c) => {
-          if (obj.path)
+          if (obj.path){
             obj.data = 'data:audio/aac;base64,' + <string>resultResult[c].data
+          }
+            
         })
-        this.recordingData.push({
-          text: ''
-        })
+        // this.recordingData.push({
+        //   text: ''
+        // })
         this.loading.hide()
       } catch (err) {
         this.loading.hide()
@@ -303,9 +333,9 @@ export class NewSongPage implements OnInit {
       })
       // this.recordingData[this.recordingData.length - 1].path = <string>this.recording.webPath
       // this.recordingData[this.recordingData.length - 1].data = <string>this.recording.dataUrl
-      this.recordingData.push({
-        text: ''
-      })
+      // this.recordingData.push({
+      //   text: ''
+      // })
 
       this.loading.hide()
     } catch (error) {
@@ -315,10 +345,11 @@ export class NewSongPage implements OnInit {
   }
 
   async saveData() {
+    if(this.songName == "" || this.category == "") return
     this.loading.show()
     await this.store.set(SONGS_PATH, this.songName)
     await this.store.set(FOLDERS_PATH, this.category)
-    this.removeEmptyText()
+    //this.removeEmptyText()
 
     let promises: Promise<WriteFileResult>[] = []
     let c = 0
@@ -327,7 +358,7 @@ export class NewSongPage implements OnInit {
     this.deletedAudio.forEach(a => {
       deletedAudioPromises.push(
         Filesystem.deleteFile({
-          directory: Directory.Documents,
+          directory: Directory.External,
           path: <string>a.path,
         })
       )
@@ -339,7 +370,7 @@ export class NewSongPage implements OnInit {
           Filesystem.writeFile({
             path: `${MAIN_DIRECTORY}/${this.utils.removeCharacters(this.songName)}-${c}${this.utils.makeId(5)}.m4a`,
             data: data.data,
-            directory: Directory.Documents,
+            directory: Directory.External,
             recursive: true
 
           })
@@ -359,9 +390,9 @@ export class NewSongPage implements OnInit {
       category: this.category,
       data: this.recordingData.map((data, c) => {
         return {
-          text: data.text,
           path: data.path ? writeResult[c].uri : undefined,
-          data: data.path ? '' : undefined
+          text: data.text
+        //  data: data.path ? '' : undefined
         }
         //data.data != ''? `${MAIN_DIRECTORY}/${this.category}-${this.songName}-${c}.m4a`:''
       })
@@ -380,10 +411,6 @@ export class NewSongPage implements OnInit {
     this.songName = ''
     this.oldSongname = un
     this.common.selectedSong = un
-    this.recordingData = [{
-      text: '',
-      path: '',
-      data: ''
-    }]
+    this.recordingData = []
   }
 }

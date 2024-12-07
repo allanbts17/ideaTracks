@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Common } from 'src/app/shared/classes/common';
+import { Actions } from 'src/app/shared/classes/constans';
 import { BackdropService } from 'src/app/shared/services/backdrop.service';
 
 interface Tab {
@@ -79,10 +80,12 @@ export class TabsPage {
       let constainer = <HTMLElement>document.getElementById('tab-menu-container')
       this.backdrop.openBackdropWithCounter(constainer)
       this.common.changeCenterImage('stop')
+      this.common.emitAction(Actions.START_AUDIO_REC)
     } else {
       this.common.changeCenterImage('rec')
       let constainer = <HTMLElement>document.getElementById('tab-menu-container')
       this.backdrop.hideBackdrop(constainer)
+      this.common.emitAction(Actions.STOP_AUDIO_REC)
     }
   }
 

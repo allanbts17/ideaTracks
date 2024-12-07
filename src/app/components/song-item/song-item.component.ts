@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { RecordingData } from 'src/app/shared/interfaces/song';
 
 @Component({
   selector: 'app-song-item',
@@ -8,12 +9,18 @@ import { Router } from '@angular/router';
 })
 export class SongItemComponent  implements OnInit {
   @Input() title!: string
-  @Input() tracks!: number
+  @Input() tracks!: RecordingData[]
   trackText!: string
   constructor(private router: Router) { }
 
   ngOnInit() {
-    this.trackText = `${this.tracks.toString()} ${this.tracks == 1? 'pista':'pistas'}`
+    //this.trackText = `${this.tracks.toString()} ${this.tracks == 1? 'pista':'pistas'}`
+  }
+
+  getTracksQuantity(){
+    let filtered = this.tracks.filter((d => d.path)) || []
+    return `${filtered.length.toString()} ${filtered.length == 1? 'pista':'pistas'}`
+     
   }
 
   navigate(){

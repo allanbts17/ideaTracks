@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Song } from '../interfaces/song';
 import { Subject } from 'rxjs';
+import { Actions } from './constans';
 
 type CenterImageType = 'add'|'rec'|'stop'
 @Injectable({
@@ -15,6 +16,7 @@ export class Common {
 
   $navegationStart: Subject<any> = new Subject<any>
   centerImage!: CenterImageType
+  $actions: Subject<Actions> = new Subject<Actions>
 
   changeCenterImage(image: CenterImageType){
     let targetImage = <HTMLElement>document.getElementById(`${image}Icon`)
@@ -29,9 +31,13 @@ export class Common {
     
     // console.log(this.centerImage,image)
     // console.log(targetImage,actualImage)
-    
-    
     this.centerImage = image
   }
+
+  emitAction(action: Actions){
+    this.$actions.next(action)
+  }
+
+  
 
 }

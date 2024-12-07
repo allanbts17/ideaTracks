@@ -22,9 +22,10 @@ export class HomePage implements OnInit {
   }
   selectedCategory = DEFAULT_FOLDER
   async ngOnInit() {
+    //this.common.categories = await this.store.get(FOLDERS_PATH)
     
-    this.common.categories = [ DEFAULT_FOLDER, 'Cantos']
-    this.common.songs = [ 'Día a dia', 'Elijo creer']
+    // this.common.categories = [ DEFAULT_FOLDER, 'Cantos']
+    // this.common.songs = [ 'Día a dia', 'Elijo creer']
     //this.common.changeCenterImage('add')
   }
 
@@ -33,15 +34,20 @@ export class HomePage implements OnInit {
     this.common.changeCenterImage('add')
   }
 
-  getFilteredSongs(){
-    return this.common.recordingData.filter(song => {
-      return song.category == this.selectedCategory
-    })
+  // getFilteredSongs(){
+  //   return this.common.recordingData.filter(song => {
+  //     return song.category == this.selectedCategory
+  //   })
+  // }
+
+  getTracksQuantity(song: Song){
+    let tracks = song.data.filter((d => d.path)) || []
+    return tracks.length
   }
 
   navigate(song: Song){
     this.common.selectedSong = song
-    this.router.navigate(['tabs','new-song'],{ state: song })
+    this.router.navigate(['tabs','new-song'])
   }
 
 }
