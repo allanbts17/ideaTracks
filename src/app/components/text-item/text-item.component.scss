@@ -16,6 +16,7 @@
   
   .text-item-test-container {
     opacity: 0;
+    pointer-events: none;
   }
 
   .break-word {
@@ -31,4 +32,16 @@
     right: -7px;
     bottom: -7px;
     color: #2A6DF0;
+  }
+
+  .save-icon {
+    font-size: 25px;
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
+    color: #2A6DF0;
+  }
+
+  .custom-ripple {
+    opacity: 0.2;
   }

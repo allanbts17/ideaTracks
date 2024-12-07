@@ -1,3 +1,43 @@
 .timer {
     direction: rtl; /* Establece la dirección de derecha a izquierda */
   }
+
+
+
+  ion-item::part(native) {
+    background: #ffffff00;
+    padding: 0;
+  }
+
+  ion-item {
+    --inner-padding-end: 0;
+  }
+
+
+
+  .custom-ripple {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    background: lightblue;
+    padding: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .custom-ripple span {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out; /* Cambia la velocidad aquí */
+    pointer-events: none;
+  }
+  
+  @keyframes ripple-animation {
+    to {
+      transform: scale(4); /* Controla el tamaño máximo */
+      opacity: 0;
+    }
+  }
+  

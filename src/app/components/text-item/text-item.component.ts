@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, Output } from '@angular/core';
+import { RecordingData } from 'src/app/shared/interfaces/song';
 
 @Component({
   selector: 'app-text-item',
@@ -8,6 +9,7 @@ import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, Output }
 export class TextItemComponent  implements OnInit {
   @Input() inputText: boolean = false
   @Input() text = ""
+  @Input() item!: RecordingData
   @Input() textEvent = new EventEmitter<string>()
   @ViewChild('textArea') textArea!: ElementRef 
   @ViewChild('testContainer') testContainer!: ElementRef 
@@ -43,6 +45,24 @@ export class TextItemComponent  implements OnInit {
     this.text = ""
     this.inputDetection()
     this.showAddTextIcon = false
+  }
+
+  saveChanges(){
+    const invisibleCharRegex = /\u200B/;
+    this.text = this.text.replace(invisibleCharRegex,'')
+    this.item.text = this.text
+  }
+
+  detectInvisibleChar(): boolean {
+    let text = this.item?.text
+    // Expresión regular para detectar el espacio de ancho cero
+    if(text){
+      const invisibleCharRegex = /\u200B/;
+      return invisibleCharRegex.test(text); // Devuelve true si encuentra el carácter
+    } else {
+      return false
+    }
+
   }
 
 }

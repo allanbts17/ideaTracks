@@ -1,4 +1,4 @@
-<div class="container flex justify-between bg-white items-center">
+<div class="container flex justify-between bg-white items-center ion-activatable overflow-hidden">
   <div class="counter">{{currentTime}} / {{totalTime}}</div>
   <div class="waveform-container flex-1 flex space-x-0.5 items-center relative">
       <div #slider class="slide absolute w-full h-full" (click)="onClick($event)"></div>
@@ -19,6 +19,7 @@
       [attr.fill]="playing? '#2A6DF0':'#D9D9D9'"
     />
   </svg>
+  <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
 </div>
 <audio #trackAudio [id]="audioId">
   <source [src]="audioSrc" type="audio/mpeg">

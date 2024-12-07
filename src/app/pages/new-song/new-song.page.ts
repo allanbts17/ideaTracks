@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Microphone, AudioRecording, PermissionStatus, MicrophonePermissionStateValue } from '@mozartec/capacitor-microphone';
 import { RecordingData, Song } from 'src/app/shared/interfaces/song';
 import { LoadingService } from 'src/app/shared/services/loading.service';
@@ -8,7 +8,7 @@ import { Actions, DEFAULT_FOLDER, FOLDERS_PATH, MAIN_DIRECTORY, RECORDINGS_PATH,
 import { TimerService } from 'src/app/shared/services/timer.service';
 import { Common } from 'src/app/shared/classes/common';
 import { Router } from '@angular/router';
-import { ItemReorderEventDetail } from '@ionic/angular';
+import { IonPopover, ItemReorderEventDetail } from '@ionic/angular';
 import { Share } from '@capacitor/share';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 import { Subscription } from 'rxjs';
@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./new-song.page.scss'],
 })
 export class NewSongPage implements OnInit {
+  @ViewChild('popover') popover!: IonPopover;
   recording!: AudioRecording;
   recordingData: RecordingData[] = []
   //  [{
@@ -35,6 +36,16 @@ export class NewSongPage implements OnInit {
   disableReorder = true
   deletedAudio: RecordingData[] = []
   actionSubscription!: Subscription
+  onReorder = false
+  private longPressTimer: any;
+  private startX = 0;
+  private startY = 0;
+  private isLongPressTriggered = false;
+  isOpen = false
+  selectedItem!: RecordingData
+  selectedIndex!: number
+  longPressDuration = 600
+
   testSong = [
     0.016184531151553397,
     0.017841611180880172,
@@ -66,7 +77,7 @@ export class NewSongPage implements OnInit {
     0.0149811039126119,
     0.0045874016653475475,
     0.0002507525880836647
-]
+  ]
 
   constructor(private loading: LoadingService,
     private store: StorageService,
@@ -92,53 +103,22 @@ export class NewSongPage implements OnInit {
     }
   }
 
+  presentPopover(e: Event) {
+    this.popover.event = e;
+    this.isOpen = true;
+  }
 
 
-  textAdded(text: string){
+
+  textAdded(text: string) {
     this.recordingData.push({
       text: text
     })
+    //this.processAudio()
     console.log(this.recordingData)
   }
 
-  // processAudio() {
-  //   let audioElement = document.getElementById('dataAu');
-  //   let audioContext = new window.AudioContext();
-  //   let sourceUrl = audioElement?.querySelector('source')?.src as string | URL | Request;
-
-  //   fetch(sourceUrl)
-  //     .then(response => response.arrayBuffer())
-  //     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-  //     .then(audioBuffer => {
-  //       let quantizedData = this.quantizeAudioData(audioBuffer, 30);
-  //       console.log(quantizedData);
-  //     })
-  //     .catch(error => console.error('Error processing audio:', error));
-  // }
-
-  // quantizeAudioData(buffer:any, numElements:any) {
-  //   let data = buffer.getChannelData(0); // Obtener datos del canal izquierdo
-  //   console.log('raw decoded data',data)
-  //   let segmentLength = Math.floor(data.length / numElements);
-  //   let quantizedData = [];
-
-  //   for (let i = 0; i < numElements; i++) {
-  //     let start = i * segmentLength;
-  //     let end = start + segmentLength;
-  //     let segment = data.slice(start, end);
-  //     let sum = 0;
-
-  //     for (let j = 0; j < segment.length; j++) {
-  //       sum += Math.abs(segment[j]);
-  //     }
-
-  //     let avg = sum / segment.length;
-  //     quantizedData.push(avg);
-  //   }
-
-  //   return quantizedData;
-  // }
-  ionViewDidLeave(){
+  ionViewDidLeave() {
     this.actionSubscription.unsubscribe()
     let un: any = undefined
     this.common.selectedSong = un
@@ -149,9 +129,9 @@ export class NewSongPage implements OnInit {
   async ionViewDidEnter() {
 
     this.actionSubscription = this.common.$actions.subscribe(action => {
-      if(action == Actions.START_AUDIO_REC){
+      if (action == Actions.START_AUDIO_REC) {
         this.startRecording()
-      } else if(action == Actions.STOP_AUDIO_REC) {
+      } else if (action == Actions.STOP_AUDIO_REC) {
         this.stopRecording()
       }
     })
@@ -159,7 +139,7 @@ export class NewSongPage implements OnInit {
     this.common.changeCenterImage('rec')
     this.songData = this.common.selectedSong
     console.log(this.songData)
-    if (this.songData) { 
+    if (this.songData) {
       this.loading.show()
       this.category = this.songData.category
       this.songName = this.songData.song
@@ -175,14 +155,14 @@ export class NewSongPage implements OnInit {
         else
           promises.push(Promise.resolve({ data: '' }))
       }
-      
+
       try {
         let resultResult = await Promise.all(promises)
         this.recordingData.forEach((obj, c) => {
-          if (obj.path){
+          if (obj.path) {
             obj.data = 'data:audio/aac;base64,' + <string>resultResult[c].data
           }
-            
+
         })
         // this.recordingData.push({
         //   text: ''
@@ -205,18 +185,23 @@ export class NewSongPage implements OnInit {
   handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
     // The `from` and `to` properties contain the index of the item
     // when the drag started and ended, respectively
-    //console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
-    this.removeEmptyText()
+    console.log('Dragged from index', ev.detail.from, 'to', ev.detail.to);
+
     // Finish the reorder and position the item in the DOM based on
     // where the gesture ended. This method can also be called directly
     // by the reorder group
-    this.recordingData = ev.detail.complete(this.recordingData);
-    if (
-      !this.recordingData[this.recordingData.length - 1].text ||
-      this.recordingData[this.recordingData.length - 1].text && this.recordingData[this.recordingData.length - 1].text != '') {
-      this.recordingData.push({ text: '' })
-    }
-    //console.log('Array',Object.assign({},this.recordingData))
+
+    console.log('Before', Object.assign({}, this.recordingData))
+    //this.recordingData = ev.detail.complete(this.recordingData);
+    this.copyArraysOrder(this.recordingData,ev.detail.complete(this.recordingData))
+    // let data = ev.detail.complete(this.recordingData);
+    // console.log("data",data)
+    // if (
+    //   !this.recordingData[this.recordingData.length - 1].text ||
+    //   this.recordingData[this.recordingData.length - 1].text && this.recordingData[this.recordingData.length - 1].text != '') {
+    //   this.recordingData.push({ text: '' })
+    // }
+    console.log('After', Object.assign({}, this.recordingData))
   }
 
   dummyData() {
@@ -251,26 +236,57 @@ export class NewSongPage implements OnInit {
     console.log('cliock')
   }
 
-  deleteItem(item: RecordingData, index: number) {
-    if (this.recordingData.length > 1) {
-      this.recordingData.splice(index, 1);
-      if (item.path?.includes('storage/emulated/0/Documents'))
-        this.deletedAudio.push(item)
+  detectInvisibleChar(item: RecordingData): boolean {
+    let text = item?.text
+    // Expresión regular para detectar el espacio de ancho cero
+    if(text){
+      const invisibleCharRegex = /\u200B/;
+      return invisibleCharRegex.test(text); // Devuelve true si encuentra el carácter
+    } else {
+      return false
     }
+
   }
 
-  async shareSong(item: RecordingData) {
-    let result = await Filesystem.writeFile({
-      directory: Directory.Cache,
-      path: `${MAIN_DIRECTORY}/CACHE/${this.utils.makeId(5)}.m4a`,
-      data: <string>item.data,
-      recursive: true
-    })
+  deleteItem() {
+    console.log('item to delete', this.selectedItem, this.selectedItem.path)
+    this.recordingData.splice(this.selectedIndex, 1);
+    if(!this.selectedItem.text)
+      this.deletedAudio.push(this.selectedItem)
+  }
 
-    console.log('URL', result.uri)
-    await Share.share({
-      files: [result.uri],
-    });
+  editItem() {
+    const invisibleChar = '\u200B'; // Espacio de ancho cero
+    this.recordingData[this.selectedIndex].text += `${invisibleChar}` 
+  }
+
+  async share() {
+    if(this.selectedItem.text){
+      await Share.share({
+        text: this.selectedItem.text,
+      });
+    } else {
+      let result = await Filesystem.writeFile({
+        directory: Directory.Cache,
+        path: `${MAIN_DIRECTORY}/CACHE/${this.utils.makeId(5)}.m4a`,
+        data: <string>this.selectedItem.data,
+        recursive: true
+      })
+  
+      console.log('URL', result.uri)
+      await Share.share({
+        files: [result.uri],
+      });
+    }
+    
+  }
+
+  copyArraysOrder<T>(dest: T[], source: T[]): void {
+    // Crear un mapa con los índices de los elementos en 'source'
+    const indexMap = new Map(source.map((item, index) => [item, index]));
+  
+    // Ordenar 'dest' in-place según el orden de los elementos en 'source'
+    dest.sort((a, b) => indexMap.get(a)! - indexMap.get(b)!);
   }
 
   async checkPermissions(): Promise<PermissionStatus> {
@@ -293,11 +309,11 @@ export class NewSongPage implements OnInit {
     }
   }
 
-  removeEmptyText() {
-    this.recordingData = this.recordingData.filter(data => {
-      return data.path || data.text != ''
-    })
-  }
+  // removeEmptyText() {
+  //   this.recordingData = this.recordingData.filter(data => {
+  //     return data.path || data.text != ''
+  //   })
+  // }
 
 
   async startRecording() {
@@ -326,7 +342,6 @@ export class NewSongPage implements OnInit {
       this.isRecording = false
       this.recording = await Microphone.stopRecording();
       console.log(this.recording)
-      this.removeEmptyText()
       this.recordingData.push({
         path: <string>this.recording.webPath,
         data: <string>this.recording.dataUrl
@@ -339,13 +354,18 @@ export class NewSongPage implements OnInit {
 
       this.loading.hide()
     } catch (error) {
+      this.recordingData.push({
+        path: '',
+        data: 'src/assets/mas.mp3'
+      })
+
       console.error('recordingResult Error: ' + JSON.stringify(error));
       this.loading.hide()
     }
   }
 
   async saveData() {
-    if(this.songName == "" || this.category == "") return
+    if (this.songName == "" || this.category == "") return
     this.loading.show()
     await this.store.set(SONGS_PATH, this.songName)
     await this.store.set(FOLDERS_PATH, this.category)
@@ -392,7 +412,7 @@ export class NewSongPage implements OnInit {
         return {
           path: data.path ? writeResult[c].uri : undefined,
           text: data.text
-        //  data: data.path ? '' : undefined
+          //  data: data.path ? '' : undefined
         }
         //data.data != ''? `${MAIN_DIRECTORY}/${this.category}-${this.songName}-${c}.m4a`:''
       })
@@ -413,4 +433,54 @@ export class NewSongPage implements OnInit {
     this.common.selectedSong = un
     this.recordingData = []
   }
+
+
+
+  onPressStart(event: TouchEvent, item: RecordingData) {
+    if(this.detectInvisibleChar(item))
+      return
+    // Obtener las coordenadas iniciales
+    const touch = event.touches[0];
+    this.startX = touch.clientX;
+    this.startY = touch.clientY;
+
+    // Iniciar temporizador para detectar pulsación larga
+    this.longPressTimer = setTimeout(() => {
+      this.isLongPressTriggered = true;
+      console.log('Pulsación larga detectada');
+    }, this.longPressDuration); // Cambia el tiempo (ms) si lo necesitas
+  }
+
+  onPressCancel(event: TouchEvent) {
+    const touch = event.touches[0];
+
+    // Verificar si el dedo se movió
+    const deltaX = Math.abs(touch.clientX - this.startX);
+    const deltaY = Math.abs(touch.clientY - this.startY);
+
+    if (deltaX > 10 || deltaY > 10) {
+      this.clearLongPress();
+      console.log('Pulsación larga cancelada por movimiento');
+    }
+  }
+
+  onPressEnd(event: TouchEvent, item: RecordingData, index: number) {
+    if(this.detectInvisibleChar(item))
+      return
+    if (!this.isLongPressTriggered) {
+      console.log('Pulsación corta detectada');
+    } else {
+      this.selectedItem = item;
+      this.selectedIndex = index;
+      this.presentPopover(event)
+    }
+    this.clearLongPress();
+  }
+
+  private clearLongPress() {
+    clearTimeout(this.longPressTimer);
+    this.isLongPressTriggered = false;
+  }
+
+
 }

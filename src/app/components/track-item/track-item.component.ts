@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { GestureController } from '@ionic/angular';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 
@@ -12,7 +12,7 @@ interface PercentageData {
   templateUrl: './track-item.component.html',
   styleUrls: ['./track-item.component.scss'],
 })
-export class TrackItemComponent implements OnInit {
+export class TrackItemComponent implements OnInit, OnChanges {
   @Input() waveForm!: number[]
   @Input() audioSrc!: string
   @ViewChild('slider', { read: ElementRef }) slider!: ElementRef<HTMLElement>;
@@ -27,6 +27,7 @@ export class TrackItemComponent implements OnInit {
   timeUpdateSetted = false
   constructor(private utils: UtilsService, private el: ElementRef, private gestureCtrl: GestureController) {
     this.audioId = utils.makeId(5).toString()
+    
   }
 
   ngAfterViewInit() {
@@ -61,25 +62,35 @@ export class TrackItemComponent implements OnInit {
 
 
 
-  ngOnInit() {
-    setTimeout(()=>{
-      this.setTimeUpdate()
-    },300)
-    let min = Math.min(...this.waveForm)
-    let max = Math.max(...this.waveForm)
-    this.percentages = this.waveForm.map(i => {
-      let _percent = this.linearInterpolation(min, 20, max, 100, i)
-      return {
-        percent: `${_percent}%`,
-        active: false
-      }
-    })
-    console.log(this.percentages)
-    setTimeout(() => {
-      this.totalTime = this.formatTime(this.audio.nativeElement.duration)
-    }, 500);
+  async ngOnInit() {
+    
 
   }
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if(changes['audioSrc'].currentValue) {
+      console.log('hi',changes['audioSrc'].currentValue,this.audioSrc)
+      setTimeout(()=>{
+        this.setTimeUpdate()
+      },300)
+      this.waveForm = await this.processAudioBase64(this.audioSrc)
+      console.log(this.waveForm)
+      let min = Math.min(...this.waveForm)
+      let max = Math.max(...this.waveForm)
+      this.percentages = this.waveForm.map(i => {
+        let _percent = this.linearInterpolation(min, 20, max, 100, i)
+        return {
+          percent: `${_percent}%`,
+          active: false
+        }
+      })
+      console.log(this.percentages)
+      setTimeout(() => {
+        this.totalTime = this.formatTime(this.audio.nativeElement.duration)
+      }, 500);
+    }
+    //console.log('Changes detected:', changes);
+    }
 
   startTouch(ev: any) {
     //console.log('touch',ev)
@@ -168,6 +179,96 @@ export class TrackItemComponent implements OnInit {
 
     const y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0));
     return y;
+  }
+
+  // processAudio(): Promise<number[]> {
+  //   let audioElement = document.getElementById(this.audioId);
+  //   console.log(audioElement)
+  //   let audioContext = new window.AudioContext();
+  //   let sourceUrl = audioElement?.querySelector('source')?.src as string | URL | Request;
+  //   console.log('source',sourceUrl)
+  //   return new Promise((resolve,reject)=>{
+  //     fetch(sourceUrl)
+  //     .then(response => response.arrayBuffer())
+  //     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+  //     .then(audioBuffer => {
+  //       let quantizedData = this.quantizeAudioData(audioBuffer, 30);
+  //       console.log(quantizedData);
+  //       //quantizedData
+  //       resolve(quantizedData);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error processing audio:', error)
+  //       reject(error)
+  //     });
+  //   })
+    
+  // }
+
+  processAudioBase64(base64Audio: string): Promise<number[]> {
+    const audioContext = new window.AudioContext();
+
+    return new Promise((resolve, reject) => {
+        try {
+            // Eliminar encabezado si existe
+            const cleanBase64 = base64Audio.includes(',') ? base64Audio.split(',')[1] : base64Audio;
+
+            // Convertir Base64 a ArrayBuffer
+            const arrayBuffer = this.base64ToArrayBuffer(cleanBase64);
+
+            // Decodificar el ArrayBuffer a AudioBuffer
+            audioContext.decodeAudioData(arrayBuffer)
+                .then(audioBuffer => {
+                    // Cuantificar los datos del audio
+                    const quantizedData = this.quantizeAudioData(audioBuffer, 30);
+                    resolve(quantizedData);
+                })
+                .catch(error => {
+                    console.error('Error procesando el audio:', error);
+                    reject(error);
+                });
+        } catch (error) {
+            console.error('Error general:', error);
+            reject(error);
+        }
+    });
+}
+
+// Conversión Base64 a ArrayBuffer
+private base64ToArrayBuffer(base64: string): ArrayBuffer {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return bytes.buffer;
+}
+
+
+  quantizeAudioData(buffer:any, numElements:any) {
+    let data = buffer.getChannelData(0); // Obtener datos del canal izquierdo
+    console.log('raw decoded data',data)
+    let segmentLength = Math.floor(data.length / numElements);
+    let quantizedData = [];
+
+    for (let i = 0; i < numElements; i++) {
+      let start = i * segmentLength;
+      let end = start + segmentLength;
+      let segment = data.slice(start, end);
+      let sum = 0;
+
+      for (let j = 0; j < segment.length; j++) {
+        sum += Math.abs(segment[j]);
+      }
+
+      let avg = sum / segment.length;
+      quantizedData.push(avg);
+    }
+
+    return quantizedData;
   }
 
 }

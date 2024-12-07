@@ -1,14 +1,20 @@
-<div class="container flex justify-center bg-white items-center">
+<div class="container flex justify-center bg-white items-center" [ngClass]="{ 'ion-activatable overflow-hidden':!(inputText || detectInvisibleChar()) }">
   @if(inputText){
     <textarea #textArea placeholder="Escribe tu texto aquí..." [(ngModel)]="text" (ngModelChange)="inputDetection()" class="align-middle flex items-center bg-transparent flex-1" ></textarea>
     <ion-icon *ngIf="showAddTextIcon" class="icon" name="add-circle" (click)="addText()"></ion-icon>
-  } @else {
+  } 
+  @else if(detectInvisibleChar()) {
+    <textarea #textArea [(ngModel)]="text" (ngModelChange)="inputDetection()" class="align-middle flex items-center bg-transparent flex-1" ></textarea>
+    <!-- <ion-icon *ngIf="showAddTextIcon" class="save-icon" name="save" (click)="saveChanges()"></ion-icon> -->
+    <ion-icon class="icon" name="save" (click)="saveChanges()"></ion-icon>
+  }
+  @else {
     <div class="align-middle flex items-center bg-transparent flex-1 break-word" style="white-space: pre-line;" >{{text}}</div>
   }
-  
+  <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
 </div>
 
-<div *ngIf="inputText" class="fixed text-item-test-container my-4 container flex justify-center bg-white items-center break-word">
+<div *ngIf="inputText || detectInvisibleChar()" class="fixed text-item-test-container my-4 container flex justify-center bg-white items-center break-word">
   <div #testContainer class="align-middle flex items-center bg-transparent flex-1" style="white-space: pre-line;" >{{text}}</div>
 </div>
 
