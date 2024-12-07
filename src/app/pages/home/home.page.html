@@ -11,9 +11,9 @@
     </ion-item>
   </ion-list> -->
 
-  <app-select-box selected="Principal" [values]="common.categories"></app-select-box>
+  <app-select-box [values]="common.categories" [(selected)]="selectedCategory"></app-select-box>
 
-  @for (song of common.recordingData; track $index) {
+  @for (song of getFilteredSongs(); track $index) {
     <div class="mt-4"></div>
     <app-song-item (click)="navigate(song)" [title]="song.song" [tracks]="song.data"></app-song-item>
   }

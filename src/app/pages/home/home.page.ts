@@ -34,16 +34,16 @@ export class HomePage implements OnInit {
     this.common.changeCenterImage('add')
   }
 
-  // getFilteredSongs(){
-  //   return this.common.recordingData.filter(song => {
-  //     return song.category == this.selectedCategory
-  //   })
-  // }
-
-  getTracksQuantity(song: Song){
-    let tracks = song.data.filter((d => d.path)) || []
-    return tracks.length
+  getFilteredSongs(){
+    return this.common.recordingData.filter(song => {
+      return song.category == this.selectedCategory
+    })
   }
+
+  // getTracksQuantity(song: Song){
+  //   let tracks = song.data.filter((d => d.path)) || []
+  //   return tracks.length
+  // }
 
   navigate(song: Song){
     this.common.selectedSong = song
