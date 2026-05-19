@@ -3,9 +3,10 @@ import { BackdropService } from 'src/app/shared/services/backdrop.service';
 import { UtilsService } from 'src/app/shared/services/utils.service';
 
 @Component({
-  selector: 'app-select-box',
-  templateUrl: './select-box.component.html',
-  styleUrls: ['./select-box.component.scss'],
+    selector: 'app-select-box',
+    templateUrl: './select-box.component.html',
+    styleUrls: ['./select-box.component.scss'],
+    standalone: false
 })
 export class SelectBoxComponent implements OnInit {
   @Input() values!: string[]

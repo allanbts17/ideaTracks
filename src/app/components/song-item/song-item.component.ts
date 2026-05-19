@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { RecordingData } from 'src/app/shared/interfaces/song';
 
 @Component({
-  selector: 'app-song-item',
-  templateUrl: './song-item.component.html',
-  styleUrls: ['./song-item.component.scss'],
+    selector: 'app-song-item',
+    templateUrl: './song-item.component.html',
+    styleUrls: ['./song-item.component.scss'],
+    standalone: false
 })
 export class SongItemComponent  implements OnInit {
   @Input() title!: string

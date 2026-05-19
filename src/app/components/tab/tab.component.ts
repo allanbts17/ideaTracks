@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'app-tab',
-  templateUrl: './tab.component.html',
-  styleUrls: ['./tab.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-tab',
+    templateUrl: './tab.component.html',
+    styleUrls: ['./tab.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class TabComponent  implements OnInit {
   @Input() type!: 'home'|'mix'|'ryhms'|'synonyms'

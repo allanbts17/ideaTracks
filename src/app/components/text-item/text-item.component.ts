@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, ViewChild, ElementRef, Output }
 import { RecordingData } from 'src/app/shared/interfaces/song';
 
 @Component({
-  selector: 'app-text-item',
-  templateUrl: './text-item.component.html',
-  styleUrls: ['./text-item.component.scss'],
+    selector: 'app-text-item',
+    templateUrl: './text-item.component.html',
+    styleUrls: ['./text-item.component.scss'],
+    standalone: false
 })
 export class TextItemComponent  implements OnInit {
   @Input() inputText: boolean = false

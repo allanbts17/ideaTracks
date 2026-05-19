@@ -15,9 +15,10 @@ import { Subscription } from 'rxjs';
 //var Ffmpeg = require('fluent-ffmpeg');
 //import * as Ffmpeg from 'fluent-ffmpeg'
 @Component({
-  selector: 'app-new-song',
-  templateUrl: './new-song.page.html',
-  styleUrls: ['./new-song.page.scss'],
+    selector: 'app-new-song',
+    templateUrl: './new-song.page.html',
+    styleUrls: ['./new-song.page.scss'],
+    standalone: false
 })
 export class NewSongPage implements OnInit {
   @ViewChild('popover') popover!: IonPopover;

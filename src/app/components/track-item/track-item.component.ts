@@ -8,9 +8,10 @@ interface PercentageData {
 }
 
 @Component({
-  selector: 'app-track-item',
-  templateUrl: './track-item.component.html',
-  styleUrls: ['./track-item.component.scss'],
+    selector: 'app-track-item',
+    templateUrl: './track-item.component.html',
+    styleUrls: ['./track-item.component.scss'],
+    standalone: false
 })
 export class TrackItemComponent implements OnInit, OnChanges {
   @Input() waveForm!: number[]
