@@ -1,6 +1,6 @@
 
 
-<div #container class=" main-container flex justify-between items-center px-4 z-10" [ngClass]="{ 'opened':opened }" (click)="openBox()">
+<div #container class="my-1 main-container flex justify-between items-center px-4 z-10" [ngClass]="{ 'opened':opened }" (click)="openBox()">
   <div class="label align-middle flex items-center">{{selected}}</div>
   <!-- <img src="../../../assets/icons/cart.svg"> -->
   <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -15,9 +15,9 @@
     </g>
 </svg>
 
-<div class="absolute top-0 background bg-white"></div>
+<div class="absolute top-0 background"></div>
 
-<div [id]="openerId" class="opener-container absolute top-0  bg-white">
+<div [id]="openerId" class="opener-container absolute top-0">
   <div class="label mx-4">{{selected}}</div>
   <div class="line "></div>
   @for(item of unSelectedValues(); track $index){

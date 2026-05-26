@@ -1,27 +1,40 @@
+:host {
+  display: block;
+}
+
 .main-container {
   //opacity: 0;
   border-radius: 12px;
+  border-color: #2a6df0;
+  border-width: 1px;
+  border-style: solid;
+  background-color: var(--ion-item-background, var(--ion-background-color, #fff));
+
   height: 48px;
   z-index: 100px;
   filter: drop-shadow(0px 10px 20px #00122608);
 
   .background {
     border-radius: 12px;
-    height: 48px;
+    height: 100%;
     width: 100%;
     z-index: -5;
     left: 0px;
+    background-color: var(--ion-item-background, var(--ion-background-color, #fff));
   }
 
   .label {
     height: 48px;
-    color: black;
-    opacity: 50%;
+    color: var(--ion-text-color, #000);
   }
 
   svg g rect {
     fill: #8f9098;
   }
+}
+
+.main-container.opened {
+  border-width: 0px;
 }
 
 .opened {
@@ -40,6 +53,7 @@
   overflow: hidden;
   transition: height 200ms ease-in-out 0s;
   filter: drop-shadow(0px 10px 20px #00122608);
+  background-color: var(--ion-item-background, var(--ion-background-color, #fff));
 
   .line {
     border-bottom: #2a6cf033;
@@ -56,7 +70,7 @@
 
   .item {
     height: 48px;
-    color: black;
+    color: var(--ion-text-color, #000);
     opacity: 50%;
     //display: block;
   }

@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 .title {
   font-weight: 600;
   opacity: 0.7;
@@ -21,7 +25,7 @@
   }
   .background {
     border-radius: 12px;
-    height: 48px;
+    height: 100%;
     width: 100%;
     z-index: -5;
     left: 0px;

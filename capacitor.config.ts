@@ -6,6 +6,11 @@ const config: CapacitorConfig = {
   webDir: 'www/browser',
   server: {
     androidScheme: 'https'
+  },
+  plugins: {
+    StatusBar: {
+      overlaysWebView: false
+    }
   }
 };
 
