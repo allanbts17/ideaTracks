@@ -1,4 +1,4 @@
-<div class="container flex justify-center bg-white items-center" [ngClass]="{ 'ion-activatable overflow-hidden':!(inputText || detectInvisibleChar()) }">
+<div class="container flex justify-center items-center" [ngClass]="{ 'ion-activatable overflow-hidden':!(inputText || detectInvisibleChar()) }">
   @if(inputText){
     <textarea #textArea placeholder="Escribe tu texto aquí..." [(ngModel)]="text" (ngModelChange)="inputDetection()" class="align-middle flex items-center bg-transparent flex-1" ></textarea>
     @if (showAddTextIcon) {
@@ -17,7 +17,7 @@
 </div>
 
 @if (inputText || detectInvisibleChar()) {
-  <div class="fixed text-item-test-container my-4 container flex justify-center bg-white items-center break-word">
+  <div class="fixed text-item-test-container my-4 container flex justify-center items-center break-word">
     <div #testContainer class="align-middle flex items-center bg-transparent flex-1" style="white-space: pre-line;" >{{text}}</div>
   </div>
 }

@@ -31,12 +31,24 @@
 
 app-home, app-config, app-new-song {
   ion-content {
-    --background: #fcfcfc; // Elige el color que desees
+    --background: var(--ion-background-color, #fcfcfc);
   }
 }
 
 ion-app {
-  background: #fcfcfc;
+  background: var(--ion-background-color, #fcfcfc);
+}
+
+@media (prefers-color-scheme: dark) {
+  app-home, app-config, app-new-song {
+    ion-content {
+      --background: #121212;
+    }
+  }
+
+  ion-app {
+    background: #121212;
+  }
 }
 
 
