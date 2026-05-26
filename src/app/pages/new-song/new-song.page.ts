@@ -15,10 +15,10 @@ import { Subscription } from 'rxjs';
 //var Ffmpeg = require('fluent-ffmpeg');
 //import * as Ffmpeg from 'fluent-ffmpeg'
 @Component({
-    selector: 'app-new-song',
-    templateUrl: './new-song.page.html',
-    styleUrls: ['./new-song.page.scss'],
-    standalone: false
+  selector: 'app-new-song',
+  templateUrl: './new-song.page.html',
+  styleUrls: ['./new-song.page.scss'],
+  standalone: false
 })
 export class NewSongPage implements OnInit {
   @ViewChild('popover') popover!: IonPopover;
@@ -194,7 +194,7 @@ export class NewSongPage implements OnInit {
 
     console.log('Before', Object.assign({}, this.recordingData))
     //this.recordingData = ev.detail.complete(this.recordingData);
-    this.copyArraysOrder(this.recordingData,ev.detail.complete(this.recordingData))
+    this.copyArraysOrder(this.recordingData, ev.detail.complete(this.recordingData))
     // let data = ev.detail.complete(this.recordingData);
     // console.log("data",data)
     // if (
@@ -240,7 +240,7 @@ export class NewSongPage implements OnInit {
   detectInvisibleChar(item: RecordingData): boolean {
     let text = item?.text
     // Expresión regular para detectar el espacio de ancho cero
-    if(text){
+    if (text) {
       const invisibleCharRegex = /\u200B/;
       return invisibleCharRegex.test(text); // Devuelve true si encuentra el carácter
     } else {
@@ -252,17 +252,17 @@ export class NewSongPage implements OnInit {
   deleteItem() {
     console.log('item to delete', this.selectedItem, this.selectedItem.path)
     this.recordingData.splice(this.selectedIndex, 1);
-    if(!this.selectedItem.text)
+    if (!this.selectedItem.text)
       this.deletedAudio.push(this.selectedItem)
   }
 
   editItem() {
     const invisibleChar = '\u200B'; // Espacio de ancho cero
-    this.recordingData[this.selectedIndex].text += `${invisibleChar}` 
+    this.recordingData[this.selectedIndex].text += `${invisibleChar}`
   }
 
   async share() {
-    if(this.selectedItem.text){
+    if (this.selectedItem.text) {
       await Share.share({
         text: this.selectedItem.text,
       });
@@ -273,19 +273,19 @@ export class NewSongPage implements OnInit {
         data: <string>this.selectedItem.data,
         recursive: true
       })
-  
+
       console.log('URL', result.uri)
       await Share.share({
         files: [result.uri],
       });
     }
-    
+
   }
 
   copyArraysOrder<T>(dest: T[], source: T[]): void {
     // Crear un mapa con los índices de los elementos en 'source'
     const indexMap = new Map(source.map((item, index) => [item, index]));
-  
+
     // Ordenar 'dest' in-place según el orden de los elementos en 'source'
     dest.sort((a, b) => indexMap.get(a)! - indexMap.get(b)!);
   }
@@ -355,10 +355,10 @@ export class NewSongPage implements OnInit {
 
       this.loading.hide()
     } catch (error) {
-      this.recordingData.push({
-        path: '',
-        data: 'src/assets/mas.mp3'
-      })
+      // this.recordingData.push({
+      //   path: '',
+      //   data: 'src/assets/mas.mp3'
+      // })
 
       console.error('recordingResult Error: ' + JSON.stringify(error));
       this.loading.hide()
@@ -383,8 +383,13 @@ export class NewSongPage implements OnInit {
           path: <string>a.path,
         })
       )
+
     })
-    await Promise.all(deletedAudioPromises)
+    try {
+      await Promise.all(deletedAudioPromises)
+    } catch (error) {
+      console.error('deleteFile Error: ' + JSON.stringify(error));
+    }
     for (let data of this.recordingData) {
       if (data.data && data.data != '') {
         promises.push(
@@ -438,7 +443,7 @@ export class NewSongPage implements OnInit {
 
 
   onPressStart(event: TouchEvent, item: RecordingData) {
-    if(this.detectInvisibleChar(item))
+    if (this.detectInvisibleChar(item))
       return
     // Obtener las coordenadas iniciales
     const touch = event.touches[0];
@@ -466,7 +471,7 @@ export class NewSongPage implements OnInit {
   }
 
   onPressEnd(event: TouchEvent, item: RecordingData, index: number) {
-    if(this.detectInvisibleChar(item))
+    if (this.detectInvisibleChar(item))
       return
     if (!this.isLongPressTriggered) {
       console.log('Pulsación corta detectada');
